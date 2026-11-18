@@ -3,227 +3,268 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>위기대응 스코어</title>
+<title>기업 살리기</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@600;800&family=Gothic+A1:wght@400;500;700&family=Nanum+Gothic+Coding:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;500;700;800&display=swap">
 <style>
-/* Layout: 회사 내부 결재 문서. 표 칸(라벨 셀 + 내용 셀), 결재란 도장으로 진행 표시, 채택 도장으로 선택 표시. 둥근 카드 없음 */
+/* Layout: 설문지처럼 문항 카드가 한 줄로 이어지는 게임. 회사마다 표지 띠 색이 바뀌고, 결정할 때마다 회사 상태 게이지가 움직인다 */
 :root{
-  --bg:#E9EBE6; --surface:#FFFFFF; --fg:#17202B; --muted:#5B6370; --line:#C5CAD0;
-  --label:#E3E6EA; --soft:#F2F3F5; --accent:#BF2E1E; --accent-ink:#FFFFFF; --info:#1E4B87;
-  --font-head:"Hahmlet","Nanum Myeongjo","Batang",serif;
+  --bg:#ECF0EE; --surface:#FFFFFF; --soft:#F4F7F5; --fg:#18211D; --muted:#5A6862; --line:#D3DCD8;
+  --gold:#D8920F; --good:#1C8A57; --warn:#C27C0E; --bad:#CC3F30; --info:#2F5FBF; --on-co:#FFFFFF;
+  --co-car:#12805A; --co-food:#BF5814; --co-air:#1F6BB0; --co-chip:#5E43B3;
+  --co:var(--co-car);
+  --font-display:"Black Han Sans","Gothic A1","Malgun Gothic",sans-serif;
   --font-body:"Gothic A1","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;
-  --font-mono:"Nanum Gothic Coding",ui-monospace,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0F1216; --surface:#181C23; --fg:#E3E6EA; --muted:#959DA9; --line:#363D49;
-    --label:#232933; --soft:#1D222A; --accent:#FF6E5A; --accent-ink:#1A0F0D; --info:#8FB6EA; color-scheme:dark;
+    --bg:#111715; --surface:#1A221F; --soft:#212B27; --fg:#E4EBE7; --muted:#97A59F; --line:#2F3B36;
+    --gold:#F0B436; --good:#4CC28A; --warn:#E9A53A; --bad:#F2725F; --info:#86A9F2; --on-co:#FFFFFF;
+    --co-car:#17905F; --co-food:#C8621C; --co-air:#2878BF; --co-chip:#6C52C2; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0F1216; --surface:#181C23; --fg:#E3E6EA; --muted:#959DA9; --line:#363D49;
-  --label:#232933; --soft:#1D222A; --accent:#FF6E5A; --accent-ink:#1A0F0D; --info:#8FB6EA; color-scheme:dark;
+  --bg:#111715; --surface:#1A221F; --soft:#212B27; --fg:#E4EBE7; --muted:#97A59F; --line:#2F3B36;
+  --gold:#F0B436; --good:#4CC28A; --warn:#E9A53A; --bad:#F2725F; --info:#86A9F2; --on-co:#FFFFFF;
+  --co-car:#17905F; --co-food:#C8621C; --co-air:#2878BF; --co-chip:#6C52C2; color-scheme:dark;
 }
+.co-car{--co:var(--co-car)} .co-food{--co:var(--co-food)} .co-air{--co:var(--co-air)} .co-chip{--co:var(--co-chip)}
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:15px;line-height:1.7;word-break:keep-all;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
-.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
-button{font:inherit;color:inherit;cursor:pointer}
-:focus-visible{outline:2px solid var(--info);outline-offset:2px}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:15px;line-height:1.65;word-break:keep-all;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 64px}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--info);outline-offset:2px}
 h1,h2,h3,p{margin:0}
-h1{font-family:var(--font-head);font-size:36px;line-height:1.2;font-weight:800;text-wrap:balance}
-h2{font-family:var(--font-head);font-size:19px;font-weight:600;text-wrap:balance}
-h3{font-size:14px;font-weight:700}
-.eyebrow{font-family:var(--font-mono);font-size:12.5px;color:var(--muted);font-weight:700}
+h1{font-family:var(--font-display);font-weight:400;font-size:44px;line-height:1.1;letter-spacing:.01em}
+h2{font-size:17px;font-weight:800;text-wrap:balance}
+h3{font-size:14px;font-weight:800}
 .muted{color:var(--muted)}
-.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
-header.top{display:flex;flex-direction:column;gap:10px;border-top:5px solid var(--fg);padding-top:12px}
-header.top p{max-width:62ch;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+.note{font-size:13px;color:var(--muted)}
 
-/* 표 칸 공통 */
-.co,.filters,.sit,.opts,.fb,.card,.score,.stat,.sign,.seg,.scn-list{background:var(--surface);border:1px solid var(--fg)}
-.co h3{padding:7px 14px;background:var(--label);border-bottom:1px solid var(--fg)}
-.co dl{margin:0;display:grid;grid-template-columns:76px minmax(0,1fr);font-size:14px}
-.co dt{padding:8px 14px;background:var(--soft);border-right:1px solid var(--line);border-top:1px solid var(--line);font-weight:700;font-size:13px;color:var(--muted)}
-.co dd{margin:0;padding:8px 14px;border-top:1px solid var(--line)}
-.co dt:first-of-type,.co dd:first-of-type{border-top:0}
+/* 표지 띠 */
+.cover{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.cover .band{background:var(--co);color:var(--on-co);padding:22px 22px 20px;position:relative;
+  background-image:radial-gradient(rgba(255,255,255,.14) 1.5px,transparent 1.6px);background-size:14px 14px;display:flex;flex-direction:column;gap:6px}
+.cover .band .tag{font-size:12.5px;font-weight:700;letter-spacing:.06em;opacity:.9}
+.cover .band p{max-width:52ch;font-size:14.5px;opacity:.95}
+.cover .body{padding:14px 22px 16px;display:flex;flex-wrap:wrap;gap:6px 18px;font-size:13.5px;color:var(--muted)}
+.cover .body b{color:var(--fg)}
 
-.grp{display:flex;flex-direction:column;gap:10px}
-.grp-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--fg);padding-bottom:6px}
-.sec-h{font-size:13px;font-weight:700}
-.scn-list{display:flex;flex-direction:column}
-.scn{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:2px 16px;text-align:left;background:transparent;border:0;border-top:1px solid var(--line);padding:14px 16px 14px 12px;transition:background .15s}
-.scn:first-child{border-top:0}
-.scn:hover{background:var(--soft)}
-.scn .no{grid-column:1;grid-row:1/4;font-family:var(--font-mono);font-size:13px;color:var(--muted);padding-top:3px}
-.scn .t{grid-column:2;font-family:var(--font-head);font-weight:600;font-size:17px}
-.scn .d{grid-column:2;color:var(--muted);font-size:14px}
-.scn .best{grid-column:3;grid-row:1/4;align-self:center;text-align:right;font-family:var(--font-mono);font-size:11.5px;color:var(--muted);min-width:64px}
-.scn .best b{display:block;font-size:24px;color:var(--fg)}
-.scn .meta{grid-column:2;display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.chip{font-family:var(--font-mono);font-size:11.5px;padding:0 6px;background:var(--label);color:var(--muted)}
-.chip.src{background:transparent;color:var(--accent);box-shadow:inset 0 0 0 1px currentColor}
-.chip.add{background:transparent;color:var(--info);box-shadow:inset 0 0 0 1px currentColor}
-.chip.sty{background:var(--fg);color:var(--surface)}
+/* 탭 */
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px;gap:4px}
+.tabs button{border:0;background:transparent;border-radius:7px;padding:9px 10px;font-weight:700;color:var(--muted)}
+.tabs button[aria-current="page"]{background:var(--co);color:var(--on-co)}
 
-.bar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+/* 문항 카드 */
+.q{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.q-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.q-no{font-family:var(--font-display);font-size:20px;color:var(--co);line-height:1}
+.q-h h2{flex:1;min-width:0}
+.q-h .req{color:var(--bad);font-weight:800}
+.q-sub{font-size:13.5px;color:var(--muted);margin-top:-8px}
+
+/* 회사 고르기 */
+.cos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.cobtn{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 12px;align-items:center;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;transition:border-color .15s,background .15s}
+.cobtn:hover{background:var(--soft)}
+.cobtn .ic{grid-row:1/3;width:44px;height:44px;border-radius:10px;background:var(--co);color:var(--on-co);display:grid;place-items:center;font-family:var(--font-display);font-size:22px}
+.cobtn b{font-size:15.5px;min-width:0}
+.cobtn span{font-size:12.5px;color:var(--muted);min-width:0}
+.cobtn[aria-pressed="true"]{border-color:var(--co);background:color-mix(in srgb,var(--co) 8%,var(--surface))}
+.cobtn[aria-pressed="true"] b::after{content:" ✓";color:var(--co)}
+
+/* 조건 설정 */
+.form-row{display:grid;grid-template-columns:96px minmax(0,1fr);gap:10px;align-items:center}
+.form-row>label,.form-row>span.lb{font-size:13.5px;font-weight:700}
+.txt{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:8px;padding:9px 12px;font-size:15px}
+.txt:focus{border-color:var(--co);outline:0}
+.radios{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.radios button{border:1.5px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 6px;font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px}
+.radios button::before{content:"";width:14px;height:14px;border-radius:50%;border:2px solid var(--line);flex:none}
+.radios button[aria-pressed="true"]{border-color:var(--co);color:var(--fg)}
+.radios button[aria-pressed="true"]::before{border-color:var(--co);background:radial-gradient(var(--co) 0 3.5px,transparent 4px)}
+.effects{background:var(--soft);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.effects b{font-size:13px}
+.effects ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+.co-desc{display:grid;grid-template-columns:64px minmax(0,1fr);gap:4px 10px;font-size:13.5px}
+.co-desc dt{color:var(--muted);font-weight:700}
+.co-desc dd{margin:0;min-width:0}
+
+/* 난이도 */
+.diffs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.diffs button{text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.diffs button b{font-size:15px}
+.diffs button span{font-size:12px;color:var(--muted);line-height:1.45}
+.diffs button[aria-pressed="true"]{border-color:var(--co);background:color-mix(in srgb,var(--co) 8%,var(--surface))}
+
+/* 필터 */
+.frow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.frow .lb{font-size:12.5px;font-weight:700;width:58px;flex:none;color:var(--muted)}
+.fchip{background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:2px 12px;font-size:13px}
+.fchip:hover{border-color:var(--muted)}
+.fchip[aria-pressed="true"]{background:var(--co);border-color:var(--co);color:var(--on-co)}
 .link{background:none;border:0;padding:4px 0;color:var(--muted);text-decoration:underline;text-underline-offset:3px;font-size:13px}
 
-/* 결재란 = 진행 표시 */
-.sign{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
-.sg{display:flex;flex-direction:column;border-left:1px solid var(--fg);text-align:center}
-.sg:first-child{border-left:0}
-.sg span{font-size:12px;padding:3px 0;background:var(--label);border-bottom:1px solid var(--fg);font-weight:700}
-.sg i{font-style:normal;height:44px;display:grid;place-items:center}
-.sg.done i::after{content:"결";width:32px;height:32px;border:2px solid var(--accent);border-radius:50%;color:var(--accent);font-family:var(--font-head);font-weight:800;font-size:14px;display:grid;place-items:center;transform:rotate(-8deg)}
-.sg.now i::after{content:"검토 중";font-size:12px;color:var(--accent);font-weight:700}
+/* 스테이지 */
+.stages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stg{text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0;transition:border-color .15s,transform .15s}
+.stg:hover{border-color:var(--co);transform:translateY(-2px)}
+.stg .top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--muted)}
+.stars{color:var(--line);letter-spacing:1px;font-size:15px}
+.stars i{font-style:normal;color:var(--gold)}
+.stg .t{font-family:var(--font-display);font-size:19px;line-height:1.25}
+.stg .d{font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.stg .meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:2px}
+.stg .best{font-size:12.5px;color:var(--muted)}
+.stg .best b{color:var(--fg);font-size:15px}
+.chip{font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--soft);color:var(--muted)}
+.chip.set{background:color-mix(in srgb,var(--co) 14%,var(--surface));color:var(--co)}
+.chip.sty{background:var(--fg);color:var(--surface)}
+.chip.grp-loss{color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,var(--surface))}
+.chip.grp-gain{color:var(--good);background:color-mix(in srgb,var(--good) 12%,var(--surface))}
+.sec-t{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;padding:6px 2px 0}
+.sec-t h2{font-family:var(--font-display);font-weight:400;font-size:22px}
+.empty{background:var(--surface);border:1.5px dashed var(--line);border-radius:12px;padding:26px 20px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 
-.sit{display:flex;flex-direction:column}
-.sit .clock{padding:8px 18px;background:var(--fg);color:var(--surface);font-family:var(--font-mono);font-weight:700;font-size:13px}
-.sit p{font-size:16.5px;padding:16px 18px 14px;line-height:1.8}
-.goal{display:grid;grid-template-columns:76px minmax(0,1fr);border-top:1px solid var(--fg);font-size:14.5px}
-.goal b{background:var(--label);border-right:1px solid var(--line);padding:9px 14px;font-size:13px}
-.goal span{padding:9px 14px;font-weight:500}
-.timer{font-variant-numeric:tabular-nums}
-.timer.low{background:var(--accent);color:var(--accent-ink);padding:0 6px}
+/* 진행 바 */
+.prog{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.prog .row{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;font-weight:700}
+.prog .track{height:8px;border-radius:4px;background:var(--soft);overflow:hidden}
+.prog .track i{display:block;height:100%;background:var(--co);border-radius:4px;transition:width .4s}
 
-.opts{display:flex;flex-direction:column}
-.opt{position:relative;display:flex;gap:14px;text-align:left;background:transparent;border:0;border-top:1px solid var(--line);padding:14px 16px;transition:background .15s}
-.opt:first-child{border-top:0}
-.opt:hover:not(:disabled){background:var(--soft)}
+/* 회사 상태 게이지 */
+.hud{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.gg{display:flex;flex-direction:column;gap:3px;min-width:0}
+.gg .l{font-size:11.5px;font-weight:700;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gg .bar{height:8px;border-radius:4px;background:var(--soft);overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.gg .bar i{display:block;height:100%;border-radius:4px;transition:width .5s}
+.gg .v{font-size:13px;font-weight:800;display:flex;gap:5px;align-items:baseline}
+.dl{font-size:11px;font-weight:800}
+.dl.up{color:var(--good)} .dl.dn{color:var(--bad)}
+.lv-good{background:var(--good)} .lv-warn{background:var(--warn)} .lv-bad{background:var(--bad)}
+
+/* 상황 */
+.sit-t{font-size:12.5px;font-weight:700;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.timer{font-variant-numeric:tabular-nums;padding:1px 8px;border-radius:999px;background:var(--soft);color:var(--fg)}
+.timer.low{background:var(--bad);color:var(--on-co)}
+.sit-q{font-size:16.5px;line-height:1.75}
+.goal{display:flex;gap:10px;align-items:baseline;background:var(--soft);border-radius:8px;padding:10px 14px;font-size:14.5px}
+.goal b{flex:none;color:var(--co);font-size:13px}
+
+/* 선택지 (라디오) */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;transition:border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--muted);background:var(--soft)}
 .opt:disabled{cursor:default}
-.opt .k{flex:none;width:22px;height:22px;border:1.5px solid var(--fg);display:grid;place-items:center;font-family:var(--font-mono);font-size:12px;font-weight:700;margin-top:2px}
-.opt .body{display:flex;flex-direction:column;gap:4px;min-width:0}
-.opt.pick{background:var(--soft);padding-right:76px}
-.opt.pick .k{background:var(--fg);color:var(--surface)}
-.opt.pick::after{content:"채택";position:absolute;right:14px;top:50%;width:48px;height:48px;margin-top:-24px;border:2px solid var(--accent);border-radius:50%;color:var(--accent);font-family:var(--font-head);font-weight:800;font-size:13px;display:grid;place-items:center;transform:rotate(-12deg)}
-.opt.dim{opacity:.5}
-.hint{font-family:var(--font-mono);font-size:11.5px;color:var(--info)}
-
-.fb{display:flex;flex-direction:column}
-.fb-row{display:grid;grid-template-columns:116px minmax(0,1fr);border-top:1px solid var(--line)}
-.fb-row:first-child{border-top:0}
-.fb-row b{background:var(--label);padding:10px 12px;font-size:12.5px;border-right:1px solid var(--line)}
-.fb-row p{padding:10px 14px;font-size:14.5px}
-.case{border-top:1px solid var(--fg);padding:12px 14px;font-size:14px;display:flex;flex-direction:column;gap:6px;background:var(--soft)}
-.case b{font-size:12.5px;color:var(--info)}
-.rev-item .case{border:1px solid var(--line);margin-top:4px}
-.kw{display:flex;flex-wrap:wrap;gap:6px}
-.kw span{font-size:12px;padding:0 7px;border:1px solid var(--line);background:var(--surface)}
-
-.cta{background:var(--fg);color:var(--surface);border:0;padding:12px 22px;font-weight:700;align-self:flex-start}
-.cta:hover:not(:disabled){background:var(--accent);color:var(--accent-ink)}
-.cta:disabled{opacity:.45;cursor:not-allowed}
+.opt .rd{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);margin-top:2px}
+.opt .body{display:flex;flex-direction:column;gap:3px;min-width:0}
 .opt .ds{font-size:13px;color:var(--muted)}
+.opt.pick{border-color:var(--co);background:color-mix(in srgb,var(--co) 8%,var(--surface))}
+.opt.pick .rd{border-color:var(--co);background:radial-gradient(var(--co) 0 5px,transparent 5.5px)}
+.opt.dim{opacity:.45}
+.hint{font-size:12px;font-weight:700;color:var(--info)}
 
-/* 결재 의견 = 결과 예측 + 결정 근거 */
-.memo{background:var(--surface);border:1px solid var(--fg);display:flex;flex-direction:column}
-.memo h3{padding:7px 14px;background:var(--label);border-bottom:1px solid var(--fg)}
-.memo .row{display:grid;grid-template-columns:76px minmax(0,1fr);border-top:1px solid var(--line)}
-.memo .row:first-of-type{border-top:0}
-.memo .row>b{background:var(--soft);border-right:1px solid var(--line);padding:9px 14px;font-size:13px;color:var(--muted)}
-.memo .row>div{padding:9px 14px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.memo .chips{display:flex;flex-wrap:wrap;gap:6px}
-.memo textarea{font:inherit;font-size:14px;width:100%;min-height:64px;resize:vertical;background:var(--surface);color:var(--fg);border:1px solid var(--line);padding:8px 10px}
-.memo textarea:focus{border-color:var(--fg)}
-.memo .foot{border-top:1px solid var(--fg);padding:10px 14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-.ab-row .ex{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5}
-.why{font-size:14px;border-left:3px solid var(--info);padding:2px 10px;background:var(--soft)}
-.kgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
-.kgrid h3{margin-bottom:8px}
-.ghost{background:var(--surface);border:1px solid var(--fg);padding:11px 18px;font-weight:700}
-.ghost:hover{background:var(--soft)}
+/* 결정 메모 */
+.memo-row{display:flex;flex-direction:column;gap:8px}
+.memo-row>b{font-size:13.5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+textarea.txt{min-height:64px;resize:vertical;font-size:14px}
+.foot{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 
-/* 점수 = 도장 */
-.score{position:relative;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 24px;align-items:center;border-top:5px solid var(--fg);padding:20px 132px 20px 22px}
-.score .n{font-family:var(--font-mono);font-weight:700;font-size:64px;line-height:1}
-.score .n small{font-size:18px;color:var(--muted);font-weight:400}
-.score .g{display:flex;flex-direction:column;gap:2px}
-.score .g .grade{font-size:13px;font-weight:700;color:var(--muted)}
-.score .g b{font-family:var(--font-head);font-size:20px;font-weight:600}
-.stamp{position:absolute;right:24px;top:50%;width:88px;height:88px;margin-top:-44px;border:4px double var(--accent);border-radius:50%;color:var(--accent);font-family:var(--font-head);font-weight:800;font-size:40px;display:grid;place-items:center;transform:rotate(-10deg)}
+/* 결과 피드백 */
+.fb-row{display:flex;flex-direction:column;gap:2px}
+.fb-row b{font-size:12.5px;color:var(--muted)}
+.fb-row p{font-size:14.5px}
+.fb-row.trait p{color:var(--info)}
+.case{background:var(--soft);border-radius:8px;padding:12px 14px;font-size:13.5px;display:flex;flex-direction:column;gap:6px}
+.case b{font-size:12.5px;color:var(--co)}
+.kw{display:flex;flex-wrap:wrap;gap:5px}
+.kw span{font-size:11.5px;padding:0 8px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
 
-.card{padding:0 18px 18px;display:flex;flex-direction:column;gap:14px}
-.card>h2{margin:0 -18px;padding:8px 18px;background:var(--label);border-bottom:1px solid var(--fg);font-size:16px}
-.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:center}
-.radar{width:100%;height:auto;display:block}
+.cta{background:var(--co);color:var(--on-co);border:0;border-radius:9px;padding:12px 22px;font-weight:800;font-size:15px}
+.cta:hover:not(:disabled){filter:brightness(1.08)}
+.cta:disabled{opacity:.4;cursor:not-allowed}
+.ghost{background:var(--surface);border:1.5px solid var(--line);border-radius:9px;padding:11px 18px;font-weight:700}
+.ghost:hover{border-color:var(--muted)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.crumb{font-size:13px;font-weight:700;color:var(--muted)}
+
+/* 점수 */
+.score{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.score .band{background:var(--co);color:var(--on-co);padding:20px 22px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  background-image:radial-gradient(rgba(255,255,255,.14) 1.5px,transparent 1.6px);background-size:14px 14px}
+.score .n{font-family:var(--font-display);font-size:72px;line-height:1}
+.score .n small{font-family:var(--font-body);font-size:16px;opacity:.85;font-weight:700}
+.score .g{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.score .g .grade{font-size:13px;font-weight:700;opacity:.9}
+.score .g b{font-size:18px}
+.score .medal{width:76px;height:76px;border-radius:50%;background:var(--on-co);color:var(--co);display:grid;place-items:center;font-family:var(--font-display);font-size:38px;flex:none}
+.score .sub{padding:12px 22px;font-size:13.5px;display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center}
+.score .sub .stars{font-size:20px}
+.survive{display:flex;flex-direction:column;gap:10px}
+.survive .msg{font-weight:800;font-size:15px}
+
+/* 막대 */
 .dims{display:flex;flex-direction:column;gap:12px}
 .dim-row .h{display:flex;justify-content:space-between;gap:8px;font-size:14px}
-.dim-row .h small{font-family:var(--font-mono);color:var(--muted);font-size:11.5px;margin-left:6px}
-.dim-row .track{height:10px;background:var(--soft);box-shadow:inset 0 0 0 1px var(--line);margin-top:4px}
-.dim-row .track i{display:block;height:100%;background:var(--fg)}
-.dim-row.top .track i{background:var(--accent)}
+.dim-row .h small{color:var(--muted);font-size:11.5px;margin-left:6px}
+.dim-row .track{height:9px;background:var(--soft);border-radius:5px;margin-top:4px;overflow:hidden}
+.dim-row .track i{display:block;height:100%;background:var(--muted);border-radius:5px}
+.dim-row.top .track i{background:var(--co)}
 .dim-row.na .h b{color:var(--muted);font-weight:400}
+.ab-row .ex{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:center}
+.radar{width:100%;height:auto;display:block}
 .style-main{display:flex;flex-direction:column;gap:6px}
-.style-main .nm{font-family:var(--font-head);font-size:24px;font-weight:800}
-.style-main dl{margin:6px 0 0;display:grid;grid-template-columns:76px minmax(0,1fr);border:1px solid var(--line);font-size:14px}
-.style-main dt{background:var(--label);padding:7px 12px;font-size:12.5px;font-weight:700;border-right:1px solid var(--line)}
-.style-main dd{margin:0;padding:7px 12px}
-.style-main dt+dd~dt,.style-main dt+dd~dt+dd{border-top:1px solid var(--line)}
+.style-main .nm{font-family:var(--font-display);font-size:26px;color:var(--co)}
+.style-main dl{margin:6px 0 0;display:grid;grid-template-columns:72px minmax(0,1fr);gap:6px 10px;font-size:14px;background:var(--soft);border-radius:8px;padding:10px 12px}
+.style-main dt{font-weight:800;font-size:12.5px}
+.style-main dd{margin:0}
 .rev{display:flex;flex-direction:column}
 .rev-item{padding:16px 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
 .rev-item:first-child{border-top:0;padding-top:0}
-.rev-item .q{font-weight:700}
+.rev-item .q2{font-weight:800}
 .rev-item .a{font-size:14px}
 .rev-item .a span.l{display:inline-block;min-width:36px;color:var(--muted);font-weight:700;margin-right:6px}
-.actions{display:flex;gap:10px;flex-wrap:wrap}
-.note{font-size:13px}
-
-/* 탭 · 난이도 · 필터 */
-.nav{display:flex;gap:4px;border-bottom:1px solid var(--fg)}
-.nav button{background:none;border:1px solid transparent;border-bottom:0;margin-bottom:-1px;padding:8px 16px;font-weight:700;color:var(--muted)}
-.nav button[aria-current="page"]{background:var(--surface);border-color:var(--fg);color:var(--fg)}
-.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
-.seg button{text-align:left;background:transparent;border:0;border-left:1px solid var(--fg);padding:10px 14px;display:flex;flex-direction:column;gap:2px}
-.seg button:first-child{border-left:0}
-.seg button:hover{background:var(--soft)}
-.seg button[aria-pressed="true"]{background:var(--fg);color:var(--surface)}
-.seg b{font-size:15px}
-.seg span{font-size:12.5px;color:var(--muted);line-height:1.45}
-.seg button[aria-pressed="true"] span{color:inherit;opacity:.8}
-.filters{display:flex;flex-direction:column}
-.frow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 12px;border-top:1px solid var(--line)}
-.frow:first-child{border-top:0}
-.frow .lb{font-size:12.5px;font-weight:700;width:64px;flex:none}
-.fchip{background:transparent;border:1px solid var(--line);padding:1px 10px;font-size:13px}
-.fchip:hover{border-color:var(--fg)}
-.fchip[aria-pressed="true"]{background:var(--fg);color:var(--surface);border-color:var(--fg)}
-.empty{background:var(--surface);border:1px dashed var(--fg);padding:28px 20px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.why{font-size:14px;background:var(--soft);border-radius:6px;padding:6px 10px}
+.kgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.kgrid h3{margin-bottom:8px}
 
 /* 리포트 */
-.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.stat{padding:12px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
-.stat b{font-family:var(--font-mono);font-size:26px;line-height:1.15;font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat b{font-family:var(--font-display);font-weight:400;font-size:28px;line-height:1.15}
 .stat span{font-size:12.5px;color:var(--muted)}
 .diag{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:14px}
 .hist{display:flex;flex-direction:column}
 .hrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;padding:10px 0;border-top:1px solid var(--line);font-size:14px}
 .hrow:first-child{border-top:0;padding-top:0}
-.hrow .s{font-family:var(--font-mono);font-weight:700;font-size:18px;grid-row:1/3;grid-column:2;align-self:center}
+.hrow .s{font-family:var(--font-display);font-size:22px;grid-row:1/3;grid-column:2;align-self:center}
 .hrow .m{font-size:12.5px;color:var(--muted)}
-.danger{background:transparent;border:1px solid var(--line);padding:9px 14px;font-size:13px;color:var(--muted)}
-.danger:hover{border-color:var(--accent);color:var(--accent)}
-@media (max-width:560px){
-  h1{font-size:28px}
-  .two{grid-template-columns:minmax(0,1fr)}
-  .score{grid-template-columns:minmax(0,1fr);padding:18px 18px 18px}
-  .stamp{top:14px;margin-top:0;right:14px;width:64px;height:64px;font-size:28px}
-  .seg{grid-template-columns:minmax(0,1fr)}
-  .seg button{border-left:0;border-top:1px solid var(--fg)}
-  .seg button:first-child{border-top:0}
+.danger{background:transparent;border:1.5px solid var(--line);border-radius:9px;padding:9px 14px;font-size:13px;color:var(--muted)}
+.danger:hover{border-color:var(--bad);color:var(--bad)}
+.flash{border:1.5px solid var(--info);color:var(--info);border-radius:10px;padding:8px 12px;background:var(--surface);font-size:14px}
+textarea.code{font:12px ui-monospace,Consolas,monospace;min-height:80px}
+
+@media (max-width:600px){
+  h1{font-size:36px}
+  .q{padding:18px 16px}
+  .cos,.stages{grid-template-columns:minmax(0,1fr)}
+  .two,.kgrid{grid-template-columns:minmax(0,1fr)}
+  .form-row{grid-template-columns:minmax(0,1fr);gap:6px}
+  .diffs{grid-template-columns:minmax(0,1fr)}
+  .hud{grid-template-columns:repeat(3,minmax(0,1fr))}
   .stats{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-  .fb-row{grid-template-columns:minmax(0,1fr)}
-  .fb-row b{border-right:0;border-bottom:1px solid var(--line)}
-  .scn{grid-template-columns:28px minmax(0,1fr) auto;gap:2px 10px}
-  .sg.now i::after{content:"검토";}
-  .memo .row{grid-template-columns:minmax(0,1fr)}
-  .memo .row>b{border-right:0;border-bottom:1px solid var(--line)}
-  .kgrid{grid-template-columns:minmax(0,1fr)}
+  .score .n{font-size:58px}
+  .score .medal{width:60px;height:60px;font-size:30px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
-<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<style>[hidden]{display:none!important}img{max-width:100%}body{margin:0}</style>
 </head>
 <body>
 
@@ -231,8 +272,8 @@ header.top p{max-width:62ch;color:var(--muted)}
 
 <script>
 const DIMS=["초동 판단","재무 안정성","공급망 회복력","이해관계자","장기 경쟁력"];
+const DSHORT=["초동","재무","공급망","신뢰","미래"];
 const DDESC=["충격 직후 빠르게 움직여 피해가 번지는 것을 막는 힘","현금과 빚 부담을 버틸 수 있게 지키는 힘","부품·원자재 흐름이 끊기지 않게 하는 힘","협력사·노동자·고객·정부와의 신뢰","위기가 지난 뒤 시장에서 이길 수 있는 힘"];
-// 능력 지표: [키, 이름, 무엇을 보는가]
 const ABS=[
  ["dx","위기 진단력","결정 전에 이 위기에서 가장 먼저 지켜야 할 영역을 맞게 꼽았는가"],
  ["judge","상황 판단력","고른 선택이 이 위기의 가장 중요한 영역에 힘을 실었는가"],
@@ -250,9 +291,72 @@ const STY={
  shift:{n:"혁신형",d:"위기를 설계, 구조, 사업 방식을 바꾸는 계기로 씁니다.",p:"다음 위기에 덜 흔들리는 구조가 남습니다.",r:"당장의 피해를 줄이는 효과는 작고, 성과가 나오기까지 시간이 걸립니다."}
 };
 const SKEYS=["safe","bold","share","lean","shift"];
-// o: [style, 선지, 점수 5개, 영향, 목표에 미친 결과]
-// 점수 = [초동 판단, 재무 안정성, 공급망 회복력, 이해관계자, 장기 경쟁력] 0~4, 선지마다 합이 비슷하게 맞춰 정답이 드러나지 않게 함
-// w = 시나리오별 가중치. 같은 선택도 위기 유형에 따라 적합도가 달라짐
+
+/* ── 가상기업 ───────────────────────────── */
+const COS={
+ car:{n:"누리모터스",ic:"차",ind:"중견 완성차",set:true,
+  rows:[["규모","연 약 40만 대, SUV 중심, 차종 수가 적음"],["판매","수출 60% (유럽·중남미·중동), 내수 40%"],["약점","부품 협상력 약함, 재고 여력 작음, 부채비율 높음"]],
+  tr:{fin:"weak",exp:"high",size:"mid"}},
+ food:{n:"다온식품",ic:"식",ind:"라면·과자 식품 제조",
+  rows:[["규모","연 매출 약 8천억 원, 공장 3곳"],["판매","내수 75% (마트·편의점), 수출 25% (동남아·미국)"],["약점","밀·팜유 등 원재료 대부분 수입, 가격 인상에 여론이 민감"]],
+  tr:{fin:"mid",exp:"low",size:"mid"}},
+ air:{n:"하늘솔항공",ic:"항",ind:"저비용항공사(LCC)",
+  rows:[["규모","항공기 25대 모두 리스, 직원 약 2천 명"],["판매","국제선 80% (일본·동남아), 국내선 20%"],["약점","리스료·연료비는 달러, 매출은 대부분 원화, 현금 여력 작음"]],
+  tr:{fin:"weak",exp:"high",size:"small"}},
+ chip:{n:"세움테크",ic:"칩",ind:"반도체 소재 중견기업",
+  rows:[["규모","연 매출 약 1조 원, 국내 메모리 회사가 주 고객"],["판매","수출 70% (대만·중국·미국), 내수 30%"],["약점","고객사 몇 곳에 매출이 몰림, 일부 원료를 해외 한 나라에 의존"]],
+  tr:{fin:"strong",exp:"high",size:"mid"}}
+};
+const COKEYS=Object.keys(COS);
+const TRAITS={
+ fin:{n:"재무 체력",o:{weak:"약함",mid:"보통",strong:"튼튼"}},
+ exp:{n:"수출 비중",o:{low:"낮음",mid:"보통",high:"높음"}},
+ size:{n:"회사 규모",o:{small:"작음",mid:"중견",big:"대기업"}}
+};
+// 회사 조건이 선택지 효과를 바꾸는 규칙: [성향, 조건, 영역, 변화, 이유]
+const RULES=[
+ ["bold",t=>t.fin==="weak",1,-1,"재무 체력이 약해 새로 빌린 돈의 이자가 비쌌습니다."],
+ ["shift",t=>t.fin==="weak",1,-1,"투자 자금을 대기가 빠듯해 재무 부담이 커졌습니다."],
+ ["bold",t=>t.fin==="strong",1,1,"쌓아 둔 현금이 있어 공격적인 지출을 견뎠습니다."],
+ ["safe",t=>t.fin==="strong",4,-1,"여유가 있는데도 움츠러들어 경쟁사에 기회를 내줬습니다."],
+ ["shift",t=>t.exp==="high",2,1,"해외 거래처가 많아 공급처를 바꾸거나 나누기 쉬웠습니다."],
+ ["share",t=>t.exp==="low",3,1,"내수 중심이라 국내 고객·정부와 협력한 효과가 컸습니다."],
+ ["share",t=>t.exp==="high",3,-1,"매출 대부분이 해외라 국내 협력만으로는 해외 고객까지 챙기지 못했습니다."],
+ ["lean",t=>t.size==="small",0,1,"회사가 작아 결재 단계가 짧고 빨리 움직였습니다."],
+ ["bold",t=>t.size==="small",2,-1,"규모가 작아 웃돈을 줘도 원하는 물량을 다 받지 못했습니다."],
+ ["bold",t=>t.size==="big",2,1,"규모가 커서 공급사들이 우리 주문을 먼저 챙겼습니다."],
+ ["lean",t=>t.size==="big",0,-1,"조직이 커서 일부만 골라 움직이는 데 시간이 걸렸습니다."]
+];
+// 회사 조건이 위기마다 중요한 영역(가중치)을 바꾸는 규칙
+const WRULES=[
+ [t=>t.fin==="weak",()=>true,[0,10,0,0,0],"빚이 많아 재무 안정성이 더 중요해집니다."],
+ [t=>t.fin==="strong",()=>true,[0,-10,0,0,10],"버틸 돈이 있어 위기 뒤 경쟁력이 더 중요해집니다."],
+ [t=>t.exp==="high",s=>["금융","정치·지정학"].includes(s.ty),[5,0,0,-5,0],"수출이 많아 환율·무역 충격이 곧바로 매출에 닿습니다. 초동 판단이 더 중요해집니다."],
+ [t=>t.exp==="low",s=>["금융","정치·지정학"].includes(s.ty),[-5,0,0,5,0],"내수 중심이라 국내 고객·정부와의 관계가 더 중요해집니다."],
+ [t=>t.size==="small",()=>true,[0,0,0,5,-5],"작은 회사는 협력사·직원과의 관계가 무너지면 회복이 어렵습니다."],
+ [t=>t.size==="big",()=>true,[0,0,-5,0,5],"큰 회사는 공급망 협상력이 있어 장기 경쟁력에 더 신경 쓸 수 있습니다."]
+];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function weightsFor(sc,tr){
+  let w=sc.w.slice();
+  WRULES.forEach(([on,ok,d])=>{if(on(tr)&&ok(sc)) w=w.map((v,k)=>v+d[k])});
+  w=w.map(v=>Math.max(5,v)); const s=w.reduce((a,b)=>a+b,0);
+  w=w.map(v=>Math.round(v*100/s)); const diff=100-w.reduce((a,b)=>a+b,0); w[w.indexOf(Math.max(...w))]+=diff;
+  return w;
+}
+function modOpt(o,tr){
+  const s=o[2].slice(), notes=[];
+  RULES.forEach(([sty,on,k,v,why])=>{if(sty===o[0]&&on(tr)){const nv=clamp(s[k]+v,0,4);if(nv!==s[k]){s[k]=nv;notes.push(`${why} (${DIMS[k]} ${v>0?"+":""}${v})`)}}});
+  return [o[0],o[1],s,o[3],o[4],notes];
+}
+function gaugeStart(tr){
+  const g=[50,50,50,50,50];
+  if(tr.fin==="weak") g[1]=35; if(tr.fin==="strong") g[1]=65;
+  if(tr.size==="small"){g[0]=60;g[2]=40} if(tr.size==="big"){g[0]=45;g[2]=60}
+  if(tr.exp==="high") g[4]=55; if(tr.exp==="low") g[3]=55;
+  return g;
+}
+
 const SCN=[
 {id:"supply",grp:"loss",src:"set",title:"공급망 3중 충격",cause:"자연·시장·정치",era:"2011~2021",
  desc:"대지진으로 핵심 칩 공장이 멈추고, 코로나 뒤 반도체가 부족해지고, 요소수 수출이 막힙니다. 원인은 셋이지만 끊어지는 구조는 같습니다.",
@@ -1136,11 +1240,457 @@ const SCN=[
   k:["창조적 파괴"]}
 ]}
 ];
+
+SCN.push(
+{id:"f_grain",co:"food",ty:"원자재·에너지",grp:"loss",src:"add",title:"밀·팜유 가격 폭등",cause:"전쟁·수출 금지",era:"2022",
+ desc:"전쟁으로 밀값이 뛰고, 최대 팜유 생산국이 수출을 막습니다. 라면 한 봉지에 들어가는 원재료 대부분이 수입품인 회사에 원가 충격이 한꺼번에 옵니다.",
+ w:[20,25,30,15,10],steps:[
+ {t:"1단계 · 밀값 급등",q:"전쟁이 터지자 국제 밀 가격이 몇 주 만에 크게 뛰었습니다. 우리 밀 재고는 약 2개월분입니다(가정). 면 원가의 절반 이상이 밀가루입니다.",g:"원가 급등 첫 충격을 버틸 시간을 번다",o:[
+  ["safe","신제품 출시와 광고를 미루고, 지금 재고로 버티며 가격이 내려오기를 기다린다.",[2,4,1,1,1],"현금 지출이 줄었습니다. 재고가 줄어드는 동안 새 계약은 늦어졌습니다.","2개월은 버텼지만 그 뒤 더 비싼 값에 사야 할 수 있습니다."],
+  ["bold","값이 더 오르기 전에 6개월분 밀을 차입으로 한꺼번에 계약한다.",[4,1,4,1,1],"원료는 확실히 확보했지만 이자와 창고 비용이 늘었습니다.","원가 충격을 6개월 미뤘습니다. 가격이 떨어지면 비싸게 산 셈이 됩니다."],
+  ["share","제분사와 3개월 고정가 계약을 맺고, 대신 물량을 꾸준히 사 주기로 약속한다.",[3,2,3,3,1],"제분사도 판로를 확보해 협상이 빨리 끝났습니다. 시세보다 약간 비싼 값입니다.","원가를 예측할 수 있게 됐습니다. 계약 기간이 짧아 그 뒤가 문제입니다."],
+  ["lean","잘 팔리는 제품 5종에 밀가루를 몰고, 판매가 적은 제품은 생산을 잠시 멈춘다.",[4,3,2,1,1],"원료가 덜 들어 버틸 기간이 늘었습니다. 일부 매장 진열대가 비었습니다.","손실을 줄였지만 멈춘 제품의 고객 일부를 경쟁사에 뺏겼습니다."],
+  ["shift","쌀가루·감자 전분을 섞은 면을 개발해 밀 비중을 낮추는 연구를 시작한다.",[1,2,3,1,4],"개발비가 들었고 출시까지 1년 가까이 걸립니다.","이번 충격에는 효과가 없습니다. 다음 밀값 충격에 덜 흔들립니다."]],
+  c:"2022년 2월 러시아가 우크라이나를 침공하자 두 나라가 세계 밀 수출의 큰 몫을 차지하고 있어 국제 밀 가격이 급등했습니다. 국내 라면·제과 업체들이 그해 잇따라 가격을 올렸습니다.",
+  k:["세계 경제의 파편화","인플레이션율"]},
+ {t:"2단계 · 팜유 수출 금지",q:"세계 최대 팜유 생산국이 자국 식용유 값을 잡으려고 팜유 수출을 막았습니다. 라면을 튀기는 기름의 대부분이 팜유입니다. 언제 풀릴지 모릅니다.",g:"튀김유 공급이 끊겨도 생산을 이어 간다",o:[
+  ["safe","팜유 재고 안에서만 생산하고, 부족해지면 생산량을 줄인다.",[2,4,1,1,1],"추가 비용은 없었습니다. 재고가 줄면서 생산 계획이 불안해졌습니다.","금지가 길어지면 생산이 줄어듭니다."],
+  ["bold","말레이시아 등 다른 산지에서 웃돈을 주고 팜유를 긴급 수입한다.",[4,1,3,1,1],"생산은 이어졌지만 기름값이 크게 올랐습니다.","공급은 지켰고 이익은 줄었습니다."],
+  ["share","같은 처지의 식품사들과 공동으로 대체 산지 물량을 사서 나눈다.",[3,2,3,3,1],"혼자 살 때보다 값이 덜 올랐습니다. 나눠 받느라 물량이 넉넉하지는 않습니다.","생산은 대부분 지켰습니다. 업계 관계도 좋아졌습니다."],
+  ["lean","튀기지 않는 건면 제품 비중을 잠시 늘려 팜유 사용량을 줄인다.",[3,3,2,1,2],"기름 사용량이 줄었습니다. 건면은 원래 판매가 적어 매출은 조금 줄었습니다.","공급 충격을 비교적 싸게 넘겼습니다."],
+  ["shift","팜유와 다른 식물성 기름을 섞어 쓸 수 있도록 튀김 공정을 바꾼다.",[1,2,4,1,3],"설비 조정과 맛 테스트에 몇 달이 걸렸습니다.","이번에는 늦었지만 한 산지에 묶이지 않는 구조가 생깁니다."]],
+  c:"인도네시아는 2022년 4월 28일 팜유 수출을 금지했다가 5월 23일 풀었습니다. 세계 팜유 공급의 절반 이상을 차지하는 나라라 국제 식용유 가격이 크게 흔들렸습니다.",
+  k:["탈세계화","세계 경제의 파편화"]},
+ {t:"3단계 · 가격 인상 압박",q:"원가가 오를 대로 올라 영업이익이 거의 0이 됐습니다. 가격을 올리자니 정부가 식품업계에 물가 안정 협조를 요청했고, 소비자 여론도 따갑습니다.",g:"이익을 회복하면서 소비자와 정부의 신뢰를 잃지 않는다",o:[
+  ["safe","주력 제품 가격을 원가 상승분만큼 한 번에 올린다.",[3,4,1,0,1],"이익은 회복됐지만 '가격 인상 1등'이라는 기사가 났습니다.","재무는 지켰고 여론은 나빠졌습니다."],
+  ["bold","가격을 동결하고 경쟁사가 올리는 사이 점유율을 가져온다.",[3,0,1,3,3],"판매량은 늘었지만 팔수록 손해가 쌓였습니다.","점유율은 올랐습니다. 원가가 더 오르면 버티기 어렵습니다."],
+  ["share","인상 폭을 절반으로 줄이고, 그 이유와 원가 내역을 소비자에게 공개한다.",[2,2,1,4,1],"설명이 받아들여져 반발이 작았습니다. 이익 회복은 절반입니다.","신뢰를 지키며 이익 일부를 되찾았습니다."],
+  ["lean","가격은 그대로 두고 한 봉지 중량을 조금 줄인다.",[4,3,1,0,1],"원가 부담은 바로 줄었습니다. 나중에 알려지면 '꼼수'라는 비판을 받을 수 있습니다.","이익은 회복했지만 신뢰 위험을 새로 떠안았습니다."],
+  ["shift","값을 올린 대신 양과 품질을 높인 프리미엄 라인을 새로 낸다.",[1,2,1,2,4],"새 라인 준비에 시간이 걸렸습니다. 기존 제품 이익은 그대로 낮습니다.","당장 이익은 작지만 가격 인상 없이 평균 판매가를 올릴 길이 생깁니다."]],
+  c:"2022년 고물가 속에서 정부는 식품업계에 가격 인상 자제를 여러 차례 요청했습니다. 가격은 그대로 두고 용량을 줄이는 '슈링크플레이션'이 문제가 돼, 2024년부터 용량을 줄이면 알리도록 하는 제도가 생겼습니다.",
+  k:["인플레이션율","스태그플레이션"]},
+ {t:"4단계 · 1년 뒤",q:"전쟁은 길어졌지만 밀과 팜유 가격은 많이 내려왔습니다. 정부와 소비자는 '원가가 내렸으니 값을 내리라'고 요구합니다. 그동안 쌓인 손실은 아직 다 메우지 못했습니다.",g:"가격 정책과 원료 구조를 다음 충격에 맞게 다시 짠다",o:[
+  ["safe","가격은 유지하고 그동안의 손실을 메운 뒤에 내린다.",[2,4,1,0,2],"재무는 빨리 회복됐지만 비판 기사가 이어졌습니다.","손실은 메웠고 소비자 신뢰는 줄었습니다."],
+  ["bold","주력 제품 값을 먼저 내리고 '가장 먼저 내린 회사'라고 알린다.",[3,1,1,3,3],"화제가 되며 판매가 늘었습니다. 이익률은 내려갔습니다.","브랜드 평판을 얻었고 재무 회복은 늦어졌습니다."],
+  ["share","일부 제품만 값을 내리고, 정부의 원료 비축 지원 사업에 참여한다.",[2,2,3,3,2],"요구를 일부 들어줬고 비축 지원으로 다음 충격 대비도 생겼습니다.","여러 목표를 조금씩 챙겼습니다."],
+  ["lean","가격은 유지하되 원가가 쌀 때 장기 고정가 계약을 맺어 둔다.",[3,3,3,1,1],"다음 1~2년 원가가 안정됐습니다. 가격 비판은 남았습니다.","원료 대비는 좋아졌고 여론은 그대로입니다."],
+  ["shift","수입처를 3개 나라 이상으로 나누고 국산 원료 비중을 늘리는 계획을 세운다.",[1,2,4,2,4],"단가가 조금 올랐고 계획이 자리 잡는 데 시간이 걸립니다.","한 나라의 결정에 흔들리는 구조를 줄였습니다."]],
+  c:"실제 사례 연결 없음. 원가가 내려간 뒤 가격을 어떻게 할지와 다음 충격 대비를 함께 판단하는 단계입니다.",
+  k:["탈세계화","잠재 비용"]}
+]},
+{id:"f_fx",co:"food",ty:"금융",grp:"loss",src:"add",title:"환율 급등과 수입 원가",cause:"금리·환율",era:"2022",
+ desc:"미국이 금리를 빠르게 올리자 원·달러 환율이 1,400원을 넘습니다. 원료를 달러로 사 오는 회사는 같은 양을 사는데 원화가 훨씬 더 듭니다.",
+ w:[20,35,15,15,15],steps:[
+ {t:"1단계 · 환율 급등",q:"원·달러 환율이 1년 만에 1,200원에서 1,400원 넘게 올랐습니다. 원료 수입 대금의 90%가 달러입니다(가정). 환위험을 막는 장치(환헤지)는 거의 없었습니다.",g:"환율 때문에 생기는 손실이 더 커지지 않게 막는다",o:[
+  ["safe","앞으로 6개월 동안 쓸 달러를 지금 환율로 고정하는 선물환 계약을 맺는다.",[3,4,1,1,1],"환율이 더 올라도 손실이 커지지 않게 됐습니다. 내리면 이득을 놓칩니다.","손실이 커질 길을 막았습니다."],
+  ["bold","환율이 곧 내린다고 보고 원료 구매를 몇 달 미룬다.",[2,1,0,1,2],"당장 달러 지출은 줄었습니다. 환율이 더 오르면 재고가 바닥날 수 있습니다.","예측이 맞으면 크게 아끼고, 틀리면 크게 손해 봅니다."],
+  ["share","해외 공급사와 협상해 일부 대금을 원화로 내거나 환율 변동분을 나눠 지기로 한다.",[2,3,2,3,1],"협상에 시간이 걸렸고 일부 공급사만 받아들였습니다.","환위험 일부를 나눴습니다."],
+  ["lean","달러가 많이 드는 원료부터 국내산이나 원화 결제 원료로 바꿀 수 있는 것만 바꾼다.",[3,3,2,1,1],"바꿀 수 있는 원료는 생각보다 적었습니다.","손실을 조금 줄였습니다."],
+  ["shift","수출을 늘려 달러로 버는 돈을 키우고, 달러 수입과 지출이 맞도록 사업 구조를 바꾼다.",[1,2,1,1,4],"수출 확대는 몇 년이 걸리는 일입니다.","이번 손실에는 효과가 작습니다. 다음 환율 충격 때 손실과 이익이 서로 상쇄됩니다."]],
+  c:"2022년 9월 원·달러 환율이 13년 만에 1,400원을 넘었습니다. 미국 연준이 그해 기준금리를 빠르게 올린 영향이 컸고, 원료를 수입하는 식품·항공 기업의 비용 부담이 커졌습니다.",
+  k:["통화 불일치의 대차대조표 효과","자금조달비용"]},
+ {t:"2단계 · 금리 상승",q:"환율과 함께 금리도 올라 단기 차입금 이자가 두 배 가까이 늘었습니다. 은행은 만기 연장 조건으로 더 높은 금리를 요구합니다.",g:"이자 부담을 줄이고 자금줄이 끊기지 않게 한다",o:[
+  ["safe","신규 투자를 모두 멈추고 남는 현금으로 단기 차입금을 먼저 갚는다.",[3,4,1,1,0],"이자 부담이 줄었습니다. 계획했던 설비 교체가 미뤄졌습니다.","재무는 안정됐고 성장 투자는 멈췄습니다."],
+  ["bold","높은 금리를 감수하고 장기 회사채를 발행해 3년치 자금을 미리 확보한다.",[3,1,2,1,3],"이자가 비쌌지만 만기 걱정이 사라졌습니다.","자금줄은 확실해졌고 이자 비용은 늘었습니다."],
+  ["share","주거래 은행과 협상해 금리를 조금 낮추는 대신 거래 실적을 몰아주기로 한다.",[2,3,1,3,1],"금리 인상폭이 작아졌습니다. 다른 은행 선택지는 줄었습니다.","이자 부담을 일부 줄였습니다."],
+  ["lean","쓰지 않는 창고 부지를 팔아 차입금 일부를 갚는다.",[3,3,1,1,1],"현금이 생겨 이자가 줄었습니다. 나중에 창고가 필요하면 빌려야 합니다.","재무를 빠르게 개선했습니다."],
+  ["shift","재고를 줄이는 수요 예측 시스템을 들여와 묶여 있는 돈 자체를 줄인다.",[1,2,2,1,4],"시스템이 자리 잡기까지 몇 달 걸렸습니다.","당장은 효과가 작지만 빚이 덜 필요한 구조가 됩니다."]],
+  c:"2022년 한국은행은 기준금리를 여러 차례 올렸고, 그해 10월 이른바 '레고랜드 사태'로 회사채 시장이 얼어붙어 기업들이 돈을 빌리기 어려워졌습니다.",
+  k:["자금조달비용","만기 불일치"]},
+ {t:"3단계 · 소비 위축",q:"물가와 이자가 함께 오르자 소비자들이 지갑을 닫고 대형마트 할인 행사에만 몰립니다. 마트는 납품가를 낮추라고 요구합니다.",g:"판매량과 이익 사이 균형을 지킨다",o:[
+  ["safe","납품가 인하를 거절하고 행사 참여를 줄인다.",[2,4,1,1,1],"이익률은 지켰지만 매대에서 밀려 판매량이 줄었습니다.","이익은 지켰고 판매량은 놓쳤습니다."],
+  ["bold","납품가를 낮추고 행사를 늘려 판매량을 끌어올린다.",[3,1,2,2,2],"판매량은 늘었지만 한 개당 이익이 줄었습니다.","점유율은 지켰고 이익은 줄었습니다."],
+  ["share","마트와 협상해 인하 폭을 줄이는 대신 마트 전용 상품을 함께 만든다.",[2,2,1,4,2],"협상이 길었지만 마트와 관계가 좋아졌습니다.","판매와 이익을 절반씩 지켰습니다."],
+  ["lean","대용량 묶음 상품을 내서 한 개당 가격은 낮추고 전체 이익은 유지한다.",[4,3,1,1,1],"할인을 찾는 고객이 몰렸습니다.","손실 없이 판매량을 지켰습니다."],
+  ["shift","온라인 직접 판매를 키워 마트 의존도를 낮춘다.",[1,2,1,1,4],"물류와 마케팅에 돈이 들고 성과는 천천히 나옵니다.","이번 압박에는 효과가 작고 유통 구조는 단단해집니다."]],
+  c:"실제 사례 연결 없음. 고물가·고금리로 소비가 줄 때 유통사와의 협상력을 판단하는 단계입니다.",
+  k:["절약의 역설","인플레이션율"]},
+ {t:"4단계 · 환율 안정 뒤",q:"환율이 1,300원대로 내려오고 금리 인상도 멈췄습니다. 이사회는 '이번 일을 겪고 무엇을 바꿀지' 정하라고 합니다.",g:"다음 금융 충격에 대비하는 원칙을 정한다",o:[
+  ["safe","수입 대금의 절반 이상은 항상 환율을 고정해 두는 원칙을 만든다.",[2,4,1,1,2],"환율이 유리하게 움직여도 이득은 줄어듭니다.","손실의 크기를 늘 예측할 수 있게 됐습니다."],
+  ["bold","원가가 싸진 지금 해외 공장 인수를 추진한다.",[2,1,2,1,4],"인수 자금을 빌려야 해 부채가 다시 늘었습니다.","성장 기회를 잡았지만 다음 충격 때 부담이 큽니다."],
+  ["share","협력사들과 원료 공동구매·공동 환헤지 조합을 만든다.",[2,3,2,3,2],"작은 협력사도 환위험을 막을 수 있게 됐습니다.","업계 전체의 체력을 키웠습니다."],
+  ["lean","차입금을 줄여 부채비율을 목표치 아래로 낮추는 데 집중한다.",[2,4,1,1,1],"재무는 튼튼해졌고 투자 여력은 줄었습니다.","다음 충격에 버틸 체력을 길렀습니다."],
+  ["shift","달러 수입과 지출을 맞추도록 수출 비중을 25%에서 40%로 올리는 계획을 세운다(가정).",[1,2,2,1,4],"계획을 실행하는 데 3년 이상 걸립니다.","환율이 오를 때 손해와 이익이 함께 생겨 충격이 작아집니다."]],
+  c:"실제 사례 연결 없음. 위기 경험을 재무 원칙으로 바꾸는 판단 단계입니다.",
+  k:["통화 불일치의 대차대조표 효과","잠재 비용"]}
+]},
+{id:"f_home",co:"food",ty:"자연재해·보건",grp:"gain",src:"add",title:"집밥 수요 폭발",cause:"팬데믹",era:"2020",
+ desc:"감염병으로 외출이 줄자 라면과 간편식이 동나고, 해외에서도 한국 라면을 찾는 사람이 늘어납니다. 공장을 더 돌리면 기회지만 감염 위험도 함께 커집니다.",
+ w:[25,15,20,15,25],steps:[
+ {t:"1단계 · 사재기",q:"확진자가 늘자 마트에서 라면이 동났습니다. 공장은 지금 하루 2교대입니다(가정). 주문은 평소의 두 배입니다.",g:"늘어난 주문을 놓치지 않으면서 공장을 멈추지 않는다",o:[
+  ["safe","교대를 늘리지 않고 지금 생산량을 유지하며 방역을 강화한다.",[2,3,2,2,1],"감염 위험은 낮았지만 주문의 상당 부분을 채우지 못했습니다.","공장은 안전했고 기회는 절반만 잡았습니다."],
+  ["bold","3교대로 바꾸고 임시 인력을 뽑아 24시간 생산한다.",[4,2,3,1,2],"판매가 크게 늘었습니다. 확진자가 나오면 라인 전체가 멈출 위험이 커졌습니다.","기회를 최대한 잡았고 위험도 키웠습니다."],
+  ["share","노조와 협의해 특근 수당을 높이고 방역 인력을 따로 두어 생산을 늘린다.",[3,2,2,4,1],"비용이 들었지만 직원들이 자발적으로 참여했습니다.","생산을 늘리면서 현장의 신뢰를 지켰습니다."],
+  ["lean","잘 팔리는 제품 3종에만 라인을 몰아 생산량을 늘린다.",[4,3,2,1,1],"인기 제품 공급은 채웠고 다른 제품은 품절이 이어졌습니다.","적은 비용으로 판매를 크게 늘렸습니다."],
+  ["shift","이번 기회에 생산 라인 자동화 투자를 앞당긴다.",[1,2,2,1,4],"설비가 들어오기까지 몇 달 걸립니다.","당장 주문은 놓쳤지만 다음 수요 급증에 대비됐습니다."]],
+  c:"2020년 코로나19가 퍼지면서 국내외에서 라면 등 간편식 수요가 크게 늘었습니다. 일부 식품 공장은 확진자가 나와 일시적으로 문을 닫기도 했습니다(출처 확인 필요).",
+  k:["팬데믹","잠재 비용"]},
+ {t:"2단계 · 해외 주문",q:"영화와 한류 영향까지 겹쳐 해외 바이어들의 주문이 쏟아집니다. 해상 운임이 크게 올랐고 컨테이너도 구하기 어렵습니다.",g:"해외 수요를 잡아 새 시장을 연다",o:[
+  ["safe","운임이 내려갈 때까지 해외 주문은 지금 물량까지만 받는다.",[1,4,1,1,1],"수익성은 지켰지만 바이어 일부가 다른 브랜드로 옮겼습니다.","기회를 거의 놓쳤습니다."],
+  ["bold","비싼 운임을 감수하고 해외 주문을 모두 받는다.",[4,1,2,2,3],"매출이 크게 늘었지만 운임 때문에 이익률은 낮았습니다.","시장을 넓혔고 이익은 생각보다 작았습니다."],
+  ["share","현지 유통사와 손잡고 판촉 비용을 나누며 진출한다.",[3,2,2,3,2],"이익은 나눴지만 현지 매장에 빨리 들어갔습니다.","안정적으로 시장을 열었습니다."],
+  ["lean","운임 대비 이익이 큰 가까운 나라(동남아) 주문만 우선 받는다.",[3,3,2,1,2],"비용 대비 효과가 좋았습니다. 미국·유럽 시장은 늦어졌습니다.","효율적으로 수출을 늘렸습니다."],
+  ["shift","해외 현지 생산을 검토하고 현지 입맛에 맞춘 제품을 개발한다.",[1,2,3,1,4],"투자 결정과 공장 확보에 1~2년이 걸립니다.","당장은 효과가 작지만 운임 걱정 없는 해외 기반이 생깁니다."]],
+  c:"2020년 2월 영화 『기생충』이 아카데미 작품상을 받은 뒤 영화 속 '짜파구리'가 화제가 됐고, 그해 한국 라면 수출이 역대 최고를 기록했습니다. 같은 시기 해상 운임이 크게 올랐습니다.",
+  k:["세계 경제의 파편화","포모"]},
+ {t:"3단계 · 공장 확진자",q:"공장 직원 한 명이 확진됐습니다. 보건당국 지침에 따라 일부 라인을 소독하고 밀접 접촉자를 격리해야 합니다. 주문은 여전히 밀려 있습니다.",g:"감염 확산을 막고 생산 공백을 줄인다",o:[
+  ["safe","공장 전체를 사흘 멈추고 전 직원 검사를 한다.",[3,2,2,3,1],"생산 손실이 컸지만 추가 확진자가 나오지 않았습니다.","안전은 확실히 지켰습니다."],
+  ["bold","확진자가 일한 라인만 멈추고 나머지는 그대로 돌린다.",[4,3,1,0,1],"생산 손실은 작았습니다. 직원들의 불안이 커졌습니다.","생산은 지켰고 현장 신뢰는 흔들렸습니다."],
+  ["share","상황을 직원·거래처에 바로 공개하고, 격리 직원 임금을 보장하며 라인을 순차 재가동한다.",[3,2,2,4,1],"비용은 들었지만 투명한 대응으로 신뢰를 얻었습니다.","생산 공백을 줄이며 신뢰를 지켰습니다."],
+  ["lean","다른 공장으로 주력 제품 생산을 옮겨 공백을 메운다.",[4,3,3,1,1],"공백은 거의 없었습니다. 옮긴 공장 직원들의 업무가 크게 늘었습니다.","생산 공백을 효율적으로 메웠습니다."],
+  ["shift","공장마다 같은 제품을 만들 수 있도록 생산 체계를 바꾼다.",[1,2,3,1,4],"설비 조정에 시간이 걸렸습니다.","다음에는 한 공장이 멈춰도 공백이 작아집니다."]],
+  c:"실제 사례 연결 없음. 수요 급증기에 감염 위험과 생산을 함께 판단하는 단계입니다.",
+  k:["팬데믹","블루칼라 노동자"]},
+ {t:"4단계 · 수요 정상화",q:"거리두기가 끝나 국내 수요는 평소로 돌아왔습니다. 늘린 설비와 인력이 남습니다. 해외 수요는 아직 높습니다.",g:"위기 때 커진 몸집을 지속 가능한 성장으로 바꾼다",o:[
+  ["safe","임시 인력과 추가 교대를 정리해 원래 규모로 돌아간다.",[2,4,1,1,1],"비용은 줄었지만 해외 주문을 다 받기 어려워졌습니다.","재무는 안정됐고 성장 기회는 줄었습니다."],
+  ["bold","늘린 설비를 그대로 두고 해외 마케팅을 크게 늘린다.",[3,1,2,2,4],"해외 매출이 계속 늘었습니다. 마케팅비 부담이 컸습니다.","성장세를 이어 갔습니다."],
+  ["share","임시 인력 일부를 정규직으로 바꾸고 지역 농가와 원료 계약을 늘린다.",[2,2,3,4,2],"인건비가 늘었지만 지역 내 평판이 좋아졌습니다.","성장과 신뢰를 함께 챙겼습니다."],
+  ["lean","남는 라인을 다른 식품사 제품을 대신 만드는 위탁 생산에 쓴다.",[3,3,2,1,2],"설비가 놀지 않고 수익이 생겼습니다.","남는 몸집을 효율적으로 활용했습니다."],
+  ["shift","해외 수요가 큰 나라에 현지 공장을 세우는 계획을 확정한다.",[1,1,3,1,4],"큰 투자라 몇 년 동안 부담이 됩니다.","위기 때 얻은 수요를 장기 시장으로 굳힙니다."]],
+  c:"실제 사례 연결 없음. 일시적인 수요를 장기 성장으로 바꿀지 판단하는 단계입니다.",
+  k:["창조적 파괴","구조조정"]}
+]},
+{id:"f_value",co:"food",ty:"시장",grp:"gain",src:"add",title:"고물가 속 가성비 경쟁",cause:"불황형 소비",era:"2022~2023",
+ desc:"점심값이 너무 올라 사람들이 편의점 도시락과 라면으로 끼니를 해결합니다. 싸고 든든한 제품을 만드는 회사에는 기회입니다.",
+ w:[20,20,15,15,30],steps:[
+ {t:"1단계 · 런치플레이션",q:"외식비가 크게 올라 편의점 간편식과 PB(유통사 자체 상표) 상품 판매가 늘고 있습니다. 편의점 본사가 PB 라면 납품을 제안했습니다.",g:"늘어난 가성비 수요를 잡는다",o:[
+  ["safe","우리 브랜드 가치가 떨어질 수 있으니 PB 납품은 거절한다.",[1,3,1,1,2],"브랜드는 지켰지만 늘어나는 수요를 경쟁사가 가져갔습니다.","기회를 거의 잡지 못했습니다."],
+  ["bold","PB 납품을 받고 우리 브랜드 저가 라인도 동시에 낸다.",[4,2,2,2,3],"판매량이 크게 늘었습니다. 두 제품이 서로 손님을 뺏기도 했습니다.","시장을 넓게 잡았습니다."],
+  ["share","PB를 납품하되 포장에 우리가 만든다는 점을 밝히는 공동 브랜드로 협상한다.",[3,2,1,4,2],"협상이 길었지만 편의점과 관계가 깊어졌습니다.","판매와 브랜드를 함께 챙겼습니다."],
+  ["lean","남는 라인 시간에만 PB를 생산해 추가 투자 없이 매출을 늘린다.",[3,4,1,1,1],"비용이 거의 들지 않았습니다. 물량은 많지 않았습니다.","적은 위험으로 이익을 늘렸습니다."],
+  ["shift","한 끼 식사가 되는 고단백·고영양 간편식을 새 브랜드로 개발한다.",[1,2,1,1,4],"출시까지 시간이 걸리고 개발비가 듭니다.","당장 효과는 작지만 새로운 시장을 엽니다."]],
+  c:"2022년 고물가 때 '런치플레이션(점심+인플레이션)'이라는 말이 생기고, 편의점 도시락과 PB 상품 판매가 늘었다는 보도가 많았습니다(출처 확인 필요).",
+  k:["인플레이션율","절약의 역설"]},
+ {t:"2단계 · 경쟁사 가격 인상",q:"경쟁사가 주력 라면 가격을 10% 올렸습니다(가정). 우리 원가도 올랐지만 아직 버틸 여유가 조금 있습니다.",g:"경쟁사 가격 인상을 점유율 기회로 바꾼다",o:[
+  ["safe","우리도 같이 가격을 올려 이익을 회복한다.",[3,4,1,1,1],"이익은 회복했지만 점유율은 그대로입니다.","기회는 지나갔습니다."],
+  ["bold","가격을 동결하고 '가격 동결'을 크게 알린다.",[4,1,2,3,3],"점유율이 눈에 띄게 올랐습니다. 이익률은 낮아졌습니다.","점유율 기회를 확실히 잡았습니다."],
+  ["share","가격을 동결하는 대신 편의점·마트와 공동 행사를 열어 판촉비를 나눈다.",[3,2,1,4,2],"비용 부담을 나누며 판매를 늘렸습니다.","균형 있게 점유율을 올렸습니다."],
+  ["lean","가격은 동결하되 원가가 비싼 제품은 행사에서 뺀다.",[3,3,1,1,2],"이익을 크게 깎지 않고 점유율을 조금 올렸습니다.","효율적으로 기회를 활용했습니다."],
+  ["shift","가격 대신 '양 20% 증량' 제품으로 차별화한다.",[2,2,1,2,4],"새 포장과 생산 조정에 시간이 걸렸습니다.","가격 경쟁을 피하며 브랜드를 키웠습니다."]],
+  c:"실제 사례 연결 없음. 경쟁사의 가격 결정을 기회로 삼는 판단 단계입니다.",
+  k:["경착륙","포모"]},
+ {t:"3단계 · 원료 확보",q:"판매가 늘자 원료 부족이 걱정됩니다. 원료 가격은 여전히 높고 앞으로 어떻게 될지 모릅니다.",g:"늘어난 판매를 뒷받침할 원료를 안정적으로 확보한다",o:[
+  ["safe","필요한 만큼만 그때그때 산다.",[2,4,1,1,1],"재고 부담은 없었지만 가격이 오를 때마다 원가가 흔들렸습니다.","재무는 지켰고 공급은 불안했습니다."],
+  ["bold","1년치 원료를 지금 가격에 장기 계약한다.",[3,1,4,1,2],"공급은 확실해졌지만 가격이 내리면 손해입니다.","공급 걱정은 사라졌습니다."],
+  ["share","국내 농가·제분사와 장기 상생 계약을 맺는다.",[2,2,3,4,2],"단가는 조금 높지만 국내 공급망이 생겼습니다.","공급 안정과 신뢰를 함께 얻었습니다."],
+  ["lean","가장 많이 쓰는 원료 두 가지만 6개월치 고정 계약한다.",[3,3,3,1,1],"핵심 원료는 안정됐고 비용은 적었습니다.","효율적으로 위험을 줄였습니다."],
+  ["shift","대체 원료를 쓸 수 있도록 제품 배합을 다시 설계한다.",[1,2,3,1,4],"개발에 시간이 걸렸습니다.","원료 선택 폭이 넓어졌습니다."]],
+  c:"실제 사례 연결 없음. 성장기에 원료 공급망을 어떻게 짤지 판단하는 단계입니다.",
+  k:["잠재 비용","세계 경제의 파편화"]},
+ {t:"4단계 · 물가 안정 뒤",q:"물가가 안정되면서 사람들이 다시 외식을 하기 시작했습니다. 가성비 수요로 늘어난 판매를 지켜야 합니다.",g:"위기 때 얻은 고객을 계속 지킨다",o:[
+  ["safe","행사를 줄이고 이익률 회복에 집중한다.",[2,4,1,1,1],"이익은 회복됐고 고객 일부가 떠났습니다.","재무를 챙겼습니다."],
+  ["bold","멤버십·구독 서비스를 열어 고정 고객을 묶는다.",[3,1,1,2,4],"초기 비용이 들었지만 재구매가 늘었습니다.","고객을 붙잡을 장치가 생겼습니다."],
+  ["share","고객 의견을 받아 제품을 함께 만드는 행사를 연다.",[2,2,1,4,2],"브랜드 충성도가 높아졌습니다.","고객과의 관계가 깊어졌습니다."],
+  ["lean","가장 잘 팔린 제품만 남기고 나머지는 정리한다.",[3,3,2,1,2],"관리 비용이 줄었습니다.","효율적으로 핵심 고객을 지켰습니다."],
+  ["shift","간편식을 넘어 건강식 브랜드로 사업 영역을 넓힌다.",[1,2,1,1,4],"새 사업이 자리 잡는 데 시간이 걸립니다.","회사의 성장 방향을 바꿨습니다."]],
+  c:"실제 사례 연결 없음. 위기 때 얻은 수요를 지키는 판단 단계입니다.",
+  k:["창조적 파괴"]}
+]}
+);
+
+SCN.push(
+{id:"a_covid",co:"air",ty:"자연재해·보건",grp:"loss",src:"add",title:"하늘길이 닫힌 해",cause:"팬데믹",era:"2020~2022",
+ desc:"감염병으로 나라마다 입국을 막자 국제선이 거의 다 멈춥니다. 비행기는 서 있어도 리스료와 인건비는 매달 나갑니다.",
+ w:[25,35,10,20,10],steps:[
+ {t:"1단계 · 국제선 중단",q:"나라마다 입국 제한을 시작해 국제선 예약의 80% 이상이 취소됐습니다. 우리 비행기 25대 가운데 20대가 서 있습니다(가정). 현금은 약 3개월분입니다.",g:"현금이 바닥나기 전에 버틸 시간을 번다",o:[
+  ["safe","신규 투자를 모두 멈추고, 리스사에 리스료 납부 유예를 요청한다.",[3,4,1,1,1],"현금 유출이 크게 줄었습니다. 리스사는 유예 대신 이자를 붙였습니다.","버틸 기간이 5개월로 늘었습니다."],
+  ["bold","운임을 크게 낮춰 남은 국내선 좌석을 최대한 채운다.",[3,1,1,2,2],"탑승객은 늘었지만 팔수록 손해인 노선도 생겼습니다.","현금 유출을 조금 줄였습니다."],
+  ["share","노조와 협의해 순환 무급휴직을 하고, 정부 고용유지지원금을 신청한다.",[3,3,1,4,1],"인건비가 줄었고 해고 없이 인력을 지켰습니다.","버틸 기간을 늘리며 현장 신뢰를 지켰습니다."],
+  ["lean","리스 계약이 끝나는 비행기 5대를 먼저 반납한다.",[4,3,1,1,1],"고정비가 바로 줄었습니다. 수요가 돌아오면 비행기가 모자랄 수 있습니다.","현금 사정이 빠르게 나아졌습니다."],
+  ["shift","여객기 좌석을 떼어 화물을 실을 수 있게 바꾸는 방안을 검토한다.",[1,2,2,1,4],"개조 승인과 비용이 필요하고 효과는 몇 달 뒤에 나옵니다.","당장은 효과가 없지만 새 수익원이 될 수 있습니다."]],
+  c:"2020년 코로나19로 국내 항공사의 국제선 여객은 전년보다 80% 넘게 줄었습니다. 저비용항공사들은 무급휴직과 정부 고용유지지원금으로 버텼습니다(출처 확인 필요).",
+  k:["팬데믹","블루칼라 노동자"]},
+ {t:"2단계 · 정부 지원",q:"정부가 항공업 긴급 대출을 내놨습니다. 대신 일정 기간 고용을 유지하고 임원 연봉을 깎으라는 조건이 붙었습니다.",g:"자금을 확보하되 조건의 부담을 감당할 수 있게 한다",o:[
+  ["safe","조건이 부담스러우니 정부 대출 대신 기존 은행 차입을 늘린다.",[2,2,1,1,1],"자유롭게 경영할 수 있지만 은행 금리가 높았습니다.","자금은 일부 확보했습니다."],
+  ["bold","정부 대출을 최대한 받고, 그 돈으로 수요가 회복될 때 쓸 노선을 미리 확보한다.",[3,3,1,2,3],"자금은 넉넉해졌지만 고용 유지 의무가 길어졌습니다.","버틸 돈과 회복기 준비를 함께 얻었습니다."],
+  ["share","정부 대출을 받고 조건을 그대로 지키며 진행 상황을 공개한다.",[3,4,1,4,1],"조건을 지키느라 구조조정은 못 했지만 신뢰를 얻었습니다.","자금과 신뢰를 함께 확보했습니다."],
+  ["lean","꼭 필요한 만큼만 정부 대출을 받는다.",[3,3,1,2,1],"조건 부담은 작았고 자금 여유도 작았습니다.","적당히 버틸 돈을 확보했습니다."],
+  ["shift","정부 대출을 받으며 다른 저비용항공사와 합병 협상을 시작한다.",[1,3,1,1,4],"합병 협상은 길고 노조 반발도 있습니다.","위기 뒤 더 큰 회사가 될 길을 열었습니다."]],
+  c:"2020년 정부는 기간산업안정기금을 만들고, 지원받는 기업에 일정 기간 고용 유지와 임원 보수 제한 같은 조건을 붙였습니다.",
+  k:["이행조건","구제금융의 도덕적 해이"]},
+ {t:"3단계 · 화물 수요",q:"여객은 거의 없지만 마스크·전자제품 등 항공 화물 수요와 화물 운임이 크게 올랐습니다. 우리 비행기는 작은 여객기라 짐칸이 작습니다.",g:"새로 생긴 화물 수요로 손실을 줄인다",o:[
+  ["safe","작은 비행기라 효과가 작다고 보고 화물은 하지 않는다.",[1,4,1,1,1],"추가 비용은 없었고 손실도 그대로였습니다.","기회를 놓쳤습니다."],
+  ["bold","좌석을 떼어 낸 화물 전용기로 바꿔 화물 노선을 연다.",[3,2,3,1,3],"개조 비용이 들었지만 화물 수익이 생겼습니다.","손실을 꽤 줄였습니다."],
+  ["share","대형 항공사·물류사와 계약해 그들이 모은 화물을 실어 나른다.",[3,3,2,3,1],"영업 부담 없이 빈 짐칸을 채웠습니다.","안정적으로 손실을 줄였습니다."],
+  ["lean","여객 좌석은 그대로 두고 짐칸에 실을 수 있는 화물만 싣는다.",[4,3,1,1,1],"비용 없이 작은 수익이 생겼습니다.","손실을 조금 줄였습니다."],
+  ["shift","화물 사업부를 따로 만들어 위기 뒤에도 키울 계획을 세운다.",[1,2,2,1,4],"인력과 투자가 필요합니다.","새 사업의 씨앗을 심었습니다."]],
+  c:"2020년 국내 대형 항공사는 여객기를 화물기로 돌려 2분기에 흑자를 냈습니다. 일부 저비용항공사도 여객기 좌석에 화물을 싣는 방식을 도입했습니다(출처 확인 필요).",
+  k:["창조적 파괴","잠재 비용"]},
+ {t:"4단계 · 하늘길 재개",q:"입국 제한이 풀리며 예약이 빠르게 돌아옵니다. 쉬던 조종사와 정비사가 현장에 돌아오려면 훈련이 필요하고, 다른 항공사도 동시에 인력을 찾고 있습니다.",g:"수요 회복에 맞춰 빠르고 안전하게 다시 날아오른다",o:[
+  ["safe","인력 훈련이 다 끝난 비행기부터 천천히 투입한다.",[2,3,2,2,2],"안전 문제는 없었지만 성수기 예약을 놓쳤습니다.","안전하게 회복했습니다."],
+  ["bold","운항을 한꺼번에 늘리고 다른 회사 인력을 높은 연봉으로 데려온다.",[4,1,2,1,3],"좌석 공급은 빨랐지만 인건비가 크게 늘었습니다.","성수기를 잡았습니다."],
+  ["share","무급휴직자 전원을 먼저 복귀시키고 복귀 순서와 훈련 일정을 공개한다.",[3,2,2,4,2],"복귀 직원들의 신뢰가 높아졌습니다.","회복과 신뢰를 함께 챙겼습니다."],
+  ["lean","수익이 큰 일본·동남아 노선부터 다시 연다.",[4,3,2,1,1],"적은 인력으로 이익을 빨리 회복했습니다.","효율적으로 회복했습니다."],
+  ["shift","노선을 다시 짜서 수요가 큰 새로운 도시에 취항한다.",[1,2,2,1,4],"새 노선 허가와 홍보에 시간이 걸립니다.","위기 전과 다른 노선 구조를 만들었습니다."]],
+  c:"2022년 입국 제한이 풀리자 세계 곳곳의 공항과 항공사가 인력이 모자라 운항을 줄이거나 지연을 겪었습니다.",
+  k:["경착륙","블루칼라 노동자"]}
+]},
+{id:"a_oil",co:"air",ty:"원자재·에너지",grp:"loss",src:"add",title:"항공유 가격 폭등",cause:"국제 유가",era:"2008",
+ desc:"국제 유가가 배럴당 140달러를 넘습니다. 항공사 비용에서 연료비가 가장 큰 몫이라, 비행기를 띄울수록 손해가 납니다.",
+ w:[25,30,15,15,15],steps:[
+ {t:"1단계 · 유가 급등",q:"국제 유가가 1년 만에 두 배 가까이 올랐습니다. 우리 비용의 35%가 연료비입니다(가정). 유가를 고정해 둔 계약(유류 헤지)은 없습니다.",g:"유가 급등으로 인한 손실이 쌓이지 않게 한다",o:[
+  ["safe","손해가 큰 노선의 운항 횟수를 줄인다.",[3,4,1,1,1],"연료비가 줄었습니다. 해당 노선 승객은 다른 항공사로 옮겼습니다.","손실을 줄였고 점유율 일부를 잃었습니다."],
+  ["bold","지금 가격으로 1년치 항공유를 고정하는 헤지 계약을 맺는다.",[3,1,3,1,2],"유가가 더 오르면 크게 이득입니다. 떨어지면 오히려 손해입니다.","예측에 크게 건 선택입니다."],
+  ["share","유류할증료를 올리며 그 이유를 승객에게 투명하게 알린다.",[3,3,1,3,1],"일부 승객이 떠났지만 불만은 크지 않았습니다.","비용 일부를 승객과 나눴습니다."],
+  ["lean","짐 무게를 줄이고 연료를 덜 쓰는 운항 방식을 적용한다.",[4,3,1,1,1],"연료비가 몇 퍼센트 줄었습니다.","작지만 확실한 절감을 얻었습니다."],
+  ["shift","연비가 좋은 신형 비행기로 바꾸는 계획을 앞당긴다.",[1,2,2,1,4],"도입까지 몇 년이 걸리고 리스료가 높습니다.","장기적으로 유가에 덜 흔들립니다."]],
+  c:"2008년 7월 국제 유가(WTI)는 배럴당 147달러까지 올랐습니다. 국내외 항공사들이 유류할증료를 올리고 노선을 줄였습니다.",
+  k:["인플레이션율","스태그플레이션"]},
+ {t:"2단계 · 유가 급락",q:"몇 달 뒤 금융위기가 터지자 유가가 40달러대로 급락했습니다. 높은 가격에 헤지 계약을 맺어 둔 회사는 손해를 보고 있습니다. 여행 수요도 함께 줄었습니다.",g:"유가 하락과 수요 감소를 함께 관리한다",o:[
+  ["safe","유가가 낮을 때 비용을 아끼고 늘린 노선은 다시 줄인다.",[2,4,1,1,1],"재무는 안정됐고 노선망은 작아졌습니다.","안정적으로 버텼습니다."],
+  ["bold","싼 유가를 이용해 특가 운임을 내고 승객을 끌어온다.",[4,2,1,2,3],"탑승률이 올랐습니다. 운임이 낮아 이익은 작았습니다.","점유율을 넓혔습니다."],
+  ["share","여행사와 공동으로 할인 상품을 만든다.",[3,2,1,3,2],"판매 부담을 나눴습니다.","수요 감소를 함께 버텼습니다."],
+  ["lean","낮은 가격에 1년치 연료를 일부 고정한다.",[3,3,2,1,1],"다음 유가 상승에 일부 대비했습니다.","적은 비용으로 대비를 만들었습니다."],
+  ["shift","연료비가 낮을 때 장거리 신규 노선을 시험 운항한다.",[1,2,1,1,4],"성과는 불확실합니다.","새 시장을 시험했습니다."]],
+  c:"2008년 하반기 글로벌 금융위기로 유가는 연말 40달러대까지 떨어졌습니다. 높은 가격에 유류 헤지를 해 둔 일부 항공사는 큰 손실을 봤습니다(출처 확인 필요).",
+  k:["경착륙","투기성 투자"]},
+ {t:"3단계 · 환율 동반 상승",q:"금융위기로 원·달러 환율도 급등했습니다. 리스료와 연료비는 달러로 내는데, 매출은 대부분 원화입니다.",g:"달러 비용 증가로 재무가 무너지지 않게 한다",o:[
+  ["safe","달러 지출을 줄이려고 비행기 2대 리스를 조기 반납한다.",[3,4,1,1,1],"달러 부담이 줄었습니다. 위약금이 들었습니다.","재무를 지켰습니다."],
+  ["bold","환율이 곧 내려간다고 보고 달러를 사지 않고 버틴다.",[2,0,1,1,1],"환율이 계속 오르면 손실이 커집니다.","예측에 기댄 선택입니다."],
+  ["share","리스사와 협상해 리스료 일부를 원화로 내거나 기간을 늘린다.",[2,3,1,3,1],"부담이 조금 줄었습니다.","관계를 지키며 재무를 보강했습니다."],
+  ["lean","외국인 승객이 많은 노선을 늘려 달러·엔 매출을 키운다.",[3,3,1,1,2],"외화 매출이 늘어 환율 충격이 줄었습니다.","효율적으로 충격을 줄였습니다."],
+  ["shift","외화 수입과 지출이 맞도록 해외 판매 비중을 키우는 전략을 세운다.",[1,2,1,1,4],"자리 잡는 데 시간이 걸립니다.","다음 환율 충격에 덜 흔들립니다."]],
+  c:"2008년 금융위기 때 원·달러 환율은 1,500원대까지 올랐습니다. 달러 부채와 달러 비용이 많은 항공사의 손실이 커졌습니다.",
+  k:["통화 불일치의 대차대조표 효과","신흥시장"]},
+ {t:"4단계 · 위기 뒤",q:"유가와 환율이 진정됐습니다. 이사회는 '연료비 위험을 어떻게 관리할지' 원칙을 정하라고 합니다.",g:"다음 유가 충격에 대비하는 원칙을 정한다",o:[
+  ["safe","연료의 절반을 항상 고정 가격으로 사 두는 원칙을 만든다.",[2,4,2,1,2],"유가가 내려도 이득은 줄지만 손실 폭이 예측 가능해졌습니다.","안정적인 원칙이 생겼습니다."],
+  ["bold","헤지 없이 유가가 내릴 때 크게 버는 쪽을 택한다.",[2,1,1,1,2],"유가에 따라 실적이 크게 흔들립니다.","위험을 그대로 안았습니다."],
+  ["share","다른 항공사와 연료를 공동 구매한다.",[2,3,2,3,1],"구매 단가가 조금 내려갔습니다.","업계와 함께 대비했습니다."],
+  ["lean","유가에 따라 유류할증료가 자동으로 바뀌는 구조를 강화한다.",[3,3,1,1,1],"비용 변화를 빠르게 운임에 반영합니다.","효율적인 대비가 생겼습니다."],
+  ["shift","연비 좋은 신형기로 바꾸는 계획을 확정한다.",[1,2,2,1,4],"큰 투자가 필요합니다.","구조적으로 유가 위험을 줄입니다."]],
+  c:"실제 사례 연결 없음. 원자재 가격 위험을 관리하는 원칙을 정하는 단계입니다.",
+  k:["잠재 비용"]}
+]},
+{id:"a_boycott",co:"air",ty:"정치·지정학",grp:"loss",src:"add",title:"외교 갈등과 여행 불매",cause:"무역 분쟁",era:"2019",
+ desc:"두 나라의 무역 갈등이 불매 운동으로 번지자, 가장 많이 팔리던 노선의 예약이 반 토막 납니다.",
+ w:[30,20,15,20,15],steps:[
+ {t:"1단계 · 불매 확산",q:"무역 갈등으로 여행 불매 운동이 시작됐습니다. 우리 국제선 매출의 40%가 그 나라 노선입니다(가정). 다음 달 예약이 절반으로 줄었습니다.",g:"줄어든 수요에 빠르게 맞춘다",o:[
+  ["safe","갈등이 풀릴 때까지 해당 노선 운항을 크게 줄인다.",[3,4,1,1,1],"손실은 줄었지만 비행기와 승무원이 놀게 됐습니다.","손실을 줄였습니다."],
+  ["bold","운임을 크게 낮춰 남은 수요를 모두 가져온다.",[3,1,1,1,2],"탑승률은 지켰지만 운임이 낮아 손해였습니다.","점유율은 지켰습니다."],
+  ["share","이미 예약한 승객에게 수수료 없이 노선 변경·환불을 해 준다.",[3,2,1,4,1],"환불 비용이 들었지만 고객 불만이 없었습니다.","신뢰를 지켰습니다."],
+  ["lean","남는 비행기를 동남아·중국 노선으로 바로 돌린다.",[4,3,2,1,2],"비행기는 놀지 않았지만 새 노선 수요는 아직 작았습니다.","빠르게 대응했습니다."],
+  ["shift","한 나라에 쏠린 노선 구조를 바꾸는 중장기 계획을 세운다.",[1,2,2,1,4],"당장 손실은 그대로입니다.","다음 갈등에 덜 흔들립니다."]],
+  c:"2019년 7월 일본의 수출 규제 이후 국내에서 일본 여행 불매 운동이 일어나, 일본 노선 비중이 큰 저비용항공사들의 실적이 크게 나빠졌습니다.",
+  k:["탈세계화","세계 경제의 파편화"]},
+ {t:"2단계 · 노선 재배치",q:"동남아·중국 노선을 늘렸더니 모든 저비용항공사가 같은 노선으로 몰려 운임 경쟁이 심해졌습니다.",g:"과열 경쟁 속에서 손실을 줄인다",o:[
+  ["safe","경쟁이 심한 노선은 빠지고 비행기 일부를 놀린다.",[2,4,1,1,1],"손실은 줄었지만 고정비는 그대로입니다.","버티기를 택했습니다."],
+  ["bold","운임 경쟁에 끝까지 맞서 점유율을 지킨다.",[3,0,1,1,2],"점유율은 지켰지만 손실이 커졌습니다.","체력 싸움이 됐습니다."],
+  ["share","다른 항공사와 공동 운항(코드셰어)으로 좌석을 나눠 판다.",[3,3,1,3,1],"경쟁이 줄고 탑승률이 올랐습니다.","함께 손실을 줄였습니다."],
+  ["lean","경쟁이 적은 지방 공항 출발 노선을 연다.",[3,3,2,1,2],"경쟁이 적어 이익을 냈습니다.","틈새를 찾았습니다."],
+  ["shift","비행기 일부를 다른 나라 항공사에 단기 임대한다.",[2,3,1,1,3],"리스료 수입이 생겼습니다.","새로운 활용법을 찾았습니다."]],
+  c:"2019년 일본 노선을 줄인 저비용항공사들이 동남아·중국 노선을 한꺼번에 늘리면서 운임 경쟁이 심해졌다는 분석이 많았습니다(출처 확인 필요).",
+  k:["포모","좀비"]},
+ {t:"3단계 · 인력 문제",q:"손실이 이어지자 이사회는 인력 감축을 요구합니다. 조종사·정비사는 한번 내보내면 다시 뽑기 어렵습니다.",g:"비용을 줄이면서 회복할 힘을 남긴다",o:[
+  ["safe","신입 채용을 멈추고 임원 연봉을 줄인다.",[2,3,1,2,1],"비용 절감 효과는 작았습니다.","인력은 지켰습니다."],
+  ["bold","대규모 희망퇴직을 받아 인건비를 크게 줄인다.",[3,4,1,0,1],"비용은 크게 줄었지만 숙련 인력이 빠져나갔습니다.","재무는 좋아졌고 회복할 힘은 줄었습니다."],
+  ["share","노조와 협의해 근무 시간을 줄이고 임금을 나눠 깎는다.",[2,3,1,4,1],"협상이 길었지만 해고는 없었습니다.","함께 버틸 구조를 만들었습니다."],
+  ["lean","비행 횟수가 적은 승무원만 단기 휴직시킨다.",[3,3,1,1,1],"필요한 인력은 남겼습니다.","효율적으로 비용을 줄였습니다."],
+  ["shift","정비 인력으로 다른 항공사 정비를 대신 해 주는 사업을 시작한다.",[1,3,1,2,4],"사업이 자리 잡는 데 시간이 걸립니다.","남는 인력을 새 수익원으로 바꿨습니다."]],
+  c:"실제 사례 연결 없음. 비용 절감과 회복 능력 사이를 판단하는 단계입니다.",
+  k:["블루칼라 노동자","구조조정"]},
+ {t:"4단계 · 갈등 완화",q:"갈등이 조금 풀리고 해당 노선 예약이 서서히 돌아옵니다. 다시 그 노선에 집중할지 정해야 합니다.",g:"한 나라 노선에 다시 쏠리지 않으면서 수요를 되찾는다",o:[
+  ["safe","확실히 회복될 때까지 기다린다.",[1,3,1,1,1],"먼저 돌아온 수요를 다른 항공사가 가져갔습니다.","조심스럽게 대응했습니다."],
+  ["bold","줄였던 노선을 한꺼번에 다시 연다.",[4,1,1,1,2],"수요를 빨리 잡았지만 다시 쏠림이 생겼습니다.","회복은 빨랐습니다."],
+  ["share","지자체·관광청과 함께 지역 관광 상품을 만든다.",[2,2,1,4,2],"새로운 관광 수요가 생겼습니다.","관계를 넓혔습니다."],
+  ["lean","한 나라 노선이 전체의 30%를 넘지 않도록 상한을 정하고 다시 연다(가정).",[3,3,3,1,2],"회복과 분산을 함께 잡았습니다.","균형 있게 대응했습니다."],
+  ["shift","노선 다변화를 기본 원칙으로 바꾸고 장거리 노선을 준비한다.",[1,2,3,1,4],"준비에 시간이 걸립니다.","구조가 바뀌었습니다."]],
+  c:"실제 사례 연결 없음. 정치 충격 뒤 노선 구조를 다시 짜는 판단 단계입니다.",
+  k:["탈세계화","잠재 비용"]}
+]},
+{id:"a_yen",co:"air",ty:"금융",grp:"gain",src:"add",title:"엔저와 여행 붐",cause:"환율",era:"2023",
+ desc:"엔화 가치가 크게 떨어지자 일본 여행이 싸게 느껴져 예약이 쏟아집니다. 좌석을 얼마나, 얼마에 팔지가 승부입니다.",
+ w:[30,15,20,15,20],steps:[
+ {t:"1단계 · 예약 폭주",q:"엔화 약세로 일본 여행 예약이 쏟아집니다. 우리 일본 노선 탑승률은 95%입니다(가정). 다른 노선 비행기를 옮길 수 있습니다.",g:"늘어난 수요를 최대한 잡는다",o:[
+  ["safe","일정은 그대로 두고 운임만 조금 올린다.",[2,4,1,1,1],"이익률은 올랐지만 추가 수요는 놓쳤습니다.","작게 이익을 얻었습니다."],
+  ["bold","다른 노선 비행기를 빼 와 일본 노선을 두 배로 늘린다.",[4,2,2,1,2],"매출이 크게 늘었습니다. 다른 노선 승객 불만이 생겼습니다.","기회를 크게 잡았습니다."],
+  ["share","여행사·일본 지방 공항과 함께 소도시 여행 상품을 만든다.",[3,2,2,4,2],"경쟁이 적은 노선이 생겼습니다.","새로운 수요를 함께 만들었습니다."],
+  ["lean","수익이 가장 큰 시간대에만 증편한다.",[3,3,1,1,1],"적은 비용으로 이익을 늘렸습니다.","효율적으로 기회를 잡았습니다."],
+  ["shift","일본 수요가 꺼질 때를 대비해 늘린 좌석을 다른 나라 노선과 묶어 판다.",[1,2,2,1,4],"효과는 천천히 나옵니다.","쏠림 위험을 미리 줄였습니다."]],
+  c:"2023년 엔화 약세 속에 일본을 찾은 한국인은 약 700만 명으로 역대 가장 많았습니다(출처 확인 필요). 저비용항공사들의 일본 노선 실적이 크게 좋아졌습니다.",
+  k:["통화 불일치의 대차대조표 효과","포모"]},
+ {t:"2단계 · 비행기 부족",q:"비행기를 더 들이려 해도 전 세계 항공사가 동시에 비행기를 찾아 리스료가 올랐습니다.",g:"공급을 늘리되 고정비가 과하게 늘지 않게 한다",o:[
+  ["safe","비행기를 늘리지 않고 지금 기체로 운항한다.",[2,4,1,1,1],"비용은 그대로였고 성장도 그대로였습니다.","안정적으로 갔습니다."],
+  ["bold","비싼 리스료로 비행기 5대를 5년 계약한다.",[4,1,3,1,3],"좌석이 크게 늘었습니다. 수요가 꺼지면 큰 부담입니다.","성장을 크게 걸었습니다."],
+  ["share","다른 항공사와 비행기·승무원을 빌려 쓰는 단기 계약(웻리스)을 맺는다.",[3,3,2,3,1],"짧은 기간 좌석을 늘렸습니다.","유연하게 대응했습니다."],
+  ["lean","정비 일정을 조정해 비행기 가동 시간을 늘린다.",[3,3,2,1,1],"추가 비용 없이 좌석이 조금 늘었습니다.","효율을 높였습니다."],
+  ["shift","중고 비행기를 사서 리스 의존도를 줄인다.",[1,1,3,1,4],"큰돈이 들었지만 장기 비용이 내려갑니다.","구조를 바꿨습니다."]],
+  c:"실제 사례 연결 없음. 수요 붐 속에서 고정비를 어떻게 늘릴지 판단하는 단계입니다.",
+  k:["자금조달비용","만기 불일치"]},
+ {t:"3단계 · 운임 정책",q:"수요가 계속 높아 운임을 크게 올려도 좌석이 팔립니다. '저비용항공사가 너무 비싸다'는 여론도 나옵니다.",g:"이익을 키우면서 고객 신뢰를 잃지 않는다",o:[
+  ["safe","운임을 크게 올려 이익을 최대한 챙긴다.",[3,4,1,0,1],"이익이 크게 늘었습니다. 고객 불만이 커졌습니다.","이익을 챙겼습니다."],
+  ["bold","운임을 낮게 유지해 점유율을 더 넓힌다.",[3,1,1,3,3],"점유율은 늘었고 이익은 작았습니다.","고객 기반을 넓혔습니다."],
+  ["share","일찍 예약하면 싸고 늦게 예약하면 비싼 운임 구조를 공개한다.",[3,3,1,3,1],"고객이 규칙을 이해해 불만이 줄었습니다.","균형을 맞췄습니다."],
+  ["lean","좌석은 싸게 팔고 수하물·좌석 지정 같은 부가 서비스로 돈을 번다.",[4,3,1,1,2],"평균 매출이 올랐습니다.","효율적으로 이익을 냈습니다."],
+  ["shift","단골 고객 멤버십을 만들어 붐이 끝나도 탈 고객을 확보한다.",[1,2,1,2,4],"초기 혜택 비용이 듭니다.","장기 고객을 확보했습니다."]],
+  c:"실제 사례 연결 없음. 수요 붐 속 가격 결정을 판단하는 단계입니다.",
+  k:["인플레이션율"]},
+ {t:"4단계 · 붐 이후",q:"엔화가 다시 오르기 시작했고 일본 여행 열기도 조금씩 식습니다. 늘린 좌석이 남을 수 있습니다.",g:"붐이 끝나도 버틸 구조로 정리한다",o:[
+  ["safe","단기 계약 비행기부터 반납한다.",[3,4,1,1,1],"고정비가 줄었습니다.","안정적으로 정리했습니다."],
+  ["bold","남는 좌석으로 동남아 장거리 노선에 도전한다.",[2,1,2,1,4],"새 노선이 자리 잡을지는 모릅니다.","새 시장에 도전했습니다."],
+  ["share","지방 공항과 함께 지역 출발 노선을 늘린다.",[2,2,2,4,2],"지역 고객이 늘었습니다.","관계를 넓혔습니다."],
+  ["lean","수익이 낮은 노선만 줄이고 나머지는 유지한다.",[3,3,1,1,1],"효율적으로 정리했습니다.","무난하게 정리했습니다."],
+  ["shift","붐 때 번 돈으로 부채를 갚고 노선을 다변화한다.",[1,3,3,1,3],"성장은 느려졌습니다.","다음 충격에 강한 구조가 됐습니다."]],
+  c:"실제 사례 연결 없음. 호황이 끝날 때를 대비하는 판단 단계입니다.",
+  k:["경착륙","구조조정"]}
+]}
+);
+
+SCN.push(
+{id:"c_local",co:"chip",ty:"정치·지정학",grp:"gain",src:"add",title:"수출 규제가 연 국산화의 문",cause:"수출 규제",era:"2019~2021",
+ desc:"이웃 나라가 반도체 핵심 소재 수출을 막습니다. 국내 반도체 회사들은 대체 공급처를 급히 찾고, 소재를 직접 만들 수 있는 우리 회사에 기회가 옵니다.",
+ w:[25,15,25,15,20],steps:[
+ {t:"1단계 · 수출 규제 발표",q:"이웃 나라가 고순도 불화수소 등 반도체 소재 3개 품목의 수출 절차를 까다롭게 바꿨습니다. 국내 반도체 회사가 우리에게 '언제부터 얼마나 공급할 수 있냐'고 묻습니다. 우리 제품 순도는 아직 수입품보다 낮습니다(가정).",g:"고객사의 긴급 요청을 기회로 만든다",o:[
+  ["safe","품질이 확실해질 때까지는 공급 약속을 하지 않는다.",[1,4,1,1,2],"위험은 없었지만 고객사는 다른 회사와 먼저 손잡았습니다.","기회를 놓쳤습니다."],
+  ["bold","설비를 차입으로 늘리고 3개월 안에 공급하겠다고 약속한다.",[4,1,3,2,3],"고객사가 크게 반겼습니다. 약속을 못 지키면 신뢰가 무너집니다.","기회를 크게 걸었습니다."],
+  ["share","고객사 연구진과 공동 품질 테스트 팀을 꾸린다.",[3,2,3,4,2],"테스트가 빨라졌고 관계가 깊어졌습니다.","확실한 협력 기반을 만들었습니다."],
+  ["lean","지금 순도로 쓸 수 있는 공정부터 먼저 공급한다.",[4,3,2,2,1],"적은 위험으로 첫 매출을 냈습니다.","작게 시작했습니다."],
+  ["shift","더 높은 순도를 위한 정제 기술 개발에 집중 투자한다.",[1,2,2,1,4],"성과가 나오기까지 시간이 걸립니다.","장기 경쟁력을 키웠습니다."]],
+  c:"2019년 7월 일본은 고순도 불화수소, 포토레지스트, 플루오린 폴리이미드 3개 품목의 한국 수출 규제를 강화했습니다. 이후 국내 소재 기업들의 불화수소 국산화가 빨라졌습니다.",
+  k:["탈세계화","세계 경제의 파편화"]},
+ {t:"2단계 · 정부 지원",q:"정부가 소재·부품·장비 국산화 지원책을 발표했습니다. 연구개발 지원금과 세제 혜택이 있지만 성과 보고 의무도 있습니다.",g:"지원을 활용해 국산화 속도를 높인다",o:[
+  ["safe","보고 부담이 크니 지원은 받지 않고 자체 자금으로 진행한다.",[1,3,1,1,2],"자유롭게 진행했지만 속도가 느렸습니다.","천천히 갔습니다."],
+  ["bold","지원금을 최대한 받고 자체 투자도 두 배로 늘린다.",[3,1,3,2,4],"개발 속도가 크게 빨라졌습니다. 부채도 늘었습니다.","크게 성장할 발판을 만들었습니다."],
+  ["share","대학·연구소·협력사와 컨소시엄을 만들어 지원 사업에 함께 지원한다.",[2,3,3,4,2],"여러 기관의 기술을 모았습니다.","생태계를 키웠습니다."],
+  ["lean","당장 매출로 이어질 과제에만 지원금을 신청한다.",[3,3,2,1,2],"빠르게 성과를 냈습니다.","효율적으로 지원을 썼습니다."],
+  ["shift","지원금으로 차세대 소재 연구 조직을 새로 만든다.",[1,2,2,1,4],"당장 매출은 없습니다.","미래 먹거리를 준비했습니다."]],
+  c:"2019년 8월 정부는 '소재·부품·장비 경쟁력 강화 대책'을 발표하고 핵심 품목의 국산화를 지원했습니다.",
+  k:["이행조건","창조적 파괴"]},
+ {t:"3단계 · 품질 승인",q:"고객사 품질 승인을 받았습니다. 하지만 규제가 풀리면 고객사가 다시 수입품으로 돌아갈 수도 있습니다.",g:"한 번 얻은 고객을 오래 지킨다",o:[
+  ["safe","지금 받은 주문만 안정적으로 처리한다.",[2,4,1,1,1],"매출은 안정적이지만 고객을 묶을 장치가 없습니다.","현재를 지켰습니다."],
+  ["bold","공장을 더 짓고 장기 공급 계약을 맺자고 제안한다.",[3,1,3,2,3],"투자 부담이 컸지만 장기 계약을 따냈습니다.","미래 매출을 확보했습니다."],
+  ["share","고객사와 공동 개발 계약을 맺어 다음 세대 소재도 함께 만든다.",[2,2,3,4,3],"고객사와 한 팀이 됐습니다.","깊은 관계를 만들었습니다."],
+  ["lean","가격을 수입품보다 조금 낮게 정해 바꿀 이유를 없앤다.",[3,3,2,2,1],"이익률은 낮지만 고객이 떠날 이유가 줄었습니다.","효율적으로 고객을 지켰습니다."],
+  ["shift","다른 나라 반도체 회사로 수출을 시작한다.",[1,2,2,1,4],"인증에 시간이 걸립니다.","한 고객 의존을 줄였습니다."]],
+  c:"실제 사례 연결 없음. 위기 때 얻은 고객을 지키는 판단 단계입니다.",
+  k:["잠재 비용"]},
+ {t:"4단계 · 규제 해제 뒤",q:"몇 년 뒤 두 나라 관계가 나아져 규제가 풀렸습니다. 수입품 가격이 다시 내려갑니다.",g:"국산화 성과를 장기 경쟁력으로 굳힌다",o:[
+  ["safe","가격 경쟁을 피하고 남은 주문만 처리한다.",[2,4,1,1,1],"이익은 지켰지만 점유율이 줄었습니다.","조용히 정리했습니다."],
+  ["bold","가격을 크게 낮춰 수입품과 정면 승부한다.",[3,1,2,2,3],"점유율은 지켰지만 이익이 줄었습니다.","시장을 지켰습니다."],
+  ["share","정부·고객사와 '국내 공급망 유지' 협약을 맺는다.",[2,2,3,4,2],"안정적인 수요가 생겼습니다.","공급망을 함께 지켰습니다."],
+  ["lean","수익이 남는 고순도 제품만 남기고 나머지는 정리한다.",[3,3,2,1,2],"효율이 좋아졌습니다.","핵심만 남겼습니다."],
+  ["shift","국산화 기술로 해외 시장 진출과 새 소재 개발을 확대한다.",[1,2,2,1,4],"투자가 계속 필요합니다.","위기 성과를 미래로 이었습니다."]],
+  c:"2023년 3월 한일 관계 개선 뒤 일본은 수출 규제를 풀었습니다.",
+  k:["탈세계화","창조적 파괴"]}
+]},
+{id:"c_down",co:"chip",ty:"시장",grp:"loss",src:"add",title:"메모리 한파",cause:"수요 급감",era:"2022~2023",
+ desc:"코로나 때 불티나게 팔리던 PC·스마트폰 수요가 꺼지자 메모리 반도체 값이 급락합니다. 고객사들이 감산에 들어가 우리 소재 주문도 반으로 줄어듭니다.",
+ w:[20,35,15,15,15],steps:[
+ {t:"1단계 · 주문 급감",q:"고객사들이 메모리 재고가 쌓였다며 다음 분기 소재 주문을 절반으로 줄였습니다. 우리 공장 가동률이 50%로 떨어집니다(가정).",g:"주문 급감에 맞춰 손실을 줄인다",o:[
+  ["safe","가동률을 낮추고 비용이 큰 설비 투자를 모두 미룬다.",[3,4,1,1,1],"현금이 지켜졌습니다. 투자 일정이 늦어졌습니다.","손실을 줄였습니다."],
+  ["bold","공장을 계속 돌려 재고를 쌓고, 회복기에 한꺼번에 판다.",[2,0,3,1,2],"재고 비용이 커졌습니다. 회복이 늦으면 큰 손실입니다.","회복에 크게 걸었습니다."],
+  ["share","협력사와 함께 감산하고 협력사 대금은 제때 지급한다.",[3,2,2,4,1],"협력사가 무너지지 않았습니다.","함께 버텼습니다."],
+  ["lean","이익이 큰 제품 라인만 돌리고 나머지는 멈춘다.",[4,3,1,1,1],"손실을 효율적으로 줄였습니다.","핵심을 지켰습니다."],
+  ["shift","가동이 줄어든 시간에 차세대 공정용 소재 테스트를 한다.",[1,2,2,1,4],"당장 매출은 없습니다.","회복기에 앞서 나갈 준비를 했습니다."]],
+  c:"2022년 하반기부터 PC·스마트폰 수요가 줄며 메모리 값이 급락했습니다. 2023년 4월 국내 최대 반도체 회사는 메모리 감산을 공식화했습니다.",
+  k:["경착륙","절약의 역설"]},
+ {t:"2단계 · 고객사 가격 인하 요구",q:"고객사가 손실을 줄이려고 소재 단가를 15% 낮추라고 합니다(가정). 거절하면 다른 공급사로 옮길 수 있습니다.",g:"고객을 잃지 않으면서 이익을 지킨다",o:[
+  ["safe","단가 인하를 거절한다.",[2,4,1,0,1],"이익률은 지켰지만 고객사 물량 일부를 잃었습니다.","이익을 지켰습니다."],
+  ["bold","단가를 20% 낮춰 경쟁사 물량까지 가져온다.",[3,0,2,2,3],"점유율은 늘었지만 팔수록 남는 게 적습니다.","점유율을 넓혔습니다."],
+  ["share","단가를 8% 낮추는 대신 2년 공급 계약을 맺는다.",[3,2,2,4,2],"이익은 조금 줄었지만 장기 물량을 확보했습니다.","균형을 잡았습니다."],
+  ["lean","단가를 낮추되 원가를 줄이는 공정 개선으로 이익을 지킨다.",[3,3,2,1,2],"이익 감소가 작았습니다.","효율적으로 대응했습니다."],
+  ["shift","단가 경쟁 대신 성능이 더 좋은 신제품을 제안한다.",[1,2,1,2,4],"개발과 승인에 시간이 걸립니다.","경쟁 방식을 바꿨습니다."]],
+  c:"실제 사례 연결 없음. 불황기 고객사와 협상을 판단하는 단계입니다.",
+  k:["신용비용","잠재 비용"]},
+ {t:"3단계 · 자금 압박",q:"적자가 이어지며 은행이 대출 조건을 까다롭게 바꿨습니다. 우리 회사는 그동안 번 돈이 있어 현금 여유가 조금 있습니다(가정).",g:"불황이 길어져도 자금줄이 끊기지 않게 한다",o:[
+  ["safe","현금을 최대한 쌓고 배당을 멈춘다.",[2,4,1,1,1],"주주 불만이 생겼지만 버틸 힘이 생겼습니다.","재무를 지켰습니다."],
+  ["bold","값이 싸진 경쟁 소재 회사를 인수한다.",[2,1,2,1,4],"현금이 줄었지만 회복기 점유율이 커집니다.","불황을 기회로 썼습니다."],
+  ["share","어려운 협력사에 단기 자금을 빌려준다.",[2,2,3,4,1],"협력사가 버텼고 공급망이 지켜졌습니다.","공급망을 함께 지켰습니다."],
+  ["lean","쓰지 않는 장비를 팔고 다시 빌려 쓰는 방식으로 현금을 만든다.",[3,3,1,1,1],"현금이 생겼습니다.","효율적으로 자금을 만들었습니다."],
+  ["shift","불황기에 오히려 연구개발 인력을 늘린다.",[1,1,1,2,4],"비용이 늘었습니다.","회복기에 앞서 나갈 힘을 길렀습니다."]],
+  c:"반도체 업계는 오래전부터 불황에도 투자를 줄이지 않는 '역발상 투자'로 회복기 점유율을 늘린 사례가 많다고 알려져 있습니다(출처 확인 필요).",
+  k:["자금조달비용","좀비"]},
+ {t:"4단계 · AI 반도체 회복",q:"AI 서버 수요로 고성능 메모리(HBM) 주문이 늘기 시작했습니다. 일반 메모리는 아직 회복 중입니다.",g:"회복의 방향을 읽고 자원을 옮긴다",o:[
+  ["safe","일반 메모리 회복을 기다리며 기존 제품 생산을 유지한다.",[1,4,1,1,1],"안정적이지만 성장 기회를 놓쳤습니다.","조심스럽게 갔습니다."],
+  ["bold","HBM용 소재 설비에 대규모 투자를 바로 결정한다.",[4,1,3,1,4],"투자 부담이 컸지만 새 수요를 잡았습니다.","성장을 크게 잡았습니다."],
+  ["share","고객사와 HBM용 소재를 공동 개발한다.",[3,2,3,4,3],"고객사 수요에 딱 맞는 제품을 만들었습니다.","함께 성장했습니다."],
+  ["lean","기존 설비 일부만 HBM용으로 바꾼다.",[3,3,2,1,2],"적은 비용으로 새 수요에 들어갔습니다.","효율적으로 옮겼습니다."],
+  ["shift","AI 반도체 외에 전력 반도체 소재까지 사업을 넓힌다.",[1,2,2,1,4],"시간이 걸립니다.","사업 기반을 넓혔습니다."]],
+  c:"2023~2024년 AI 서버 수요가 늘면서 HBM(고대역폭 메모리) 수요가 크게 늘었고, 메모리 업계 회복을 이끌었습니다.",
+  k:["창조적 파괴","포모"]}
+]},
+{id:"c_neon",co:"chip",ty:"원자재·에너지",grp:"loss",src:"add",title:"네온 가스 공급 쇼크",cause:"전쟁·원자재",era:"2022",
+ desc:"반도체 노광 공정에 쓰는 네온 가스의 주요 생산지가 전쟁터가 됩니다. 우리 소재 공정에도 들어가는 희귀 가스 값이 몇 배로 뜁니다.",
+ w:[25,20,35,10,10],steps:[
+ {t:"1단계 · 공급 중단",q:"전쟁으로 희귀 가스(네온) 주요 공급사들이 공장을 멈췄습니다. 우리 재고는 약 2개월분입니다(가정). 가격은 몇 배로 올랐습니다.",g:"공정이 멈추지 않게 가스를 확보한다",o:[
+  ["safe","재고로 버티며 가스를 덜 쓰는 공정만 돌린다.",[2,4,1,1,1],"비용은 들지 않았지만 생산량이 줄었습니다.","버틸 시간을 벌었습니다."],
+  ["bold","몇 배 값을 주고라도 다른 나라 물량을 최대한 사들인다.",[4,1,4,1,1],"생산은 이어졌지만 원가가 크게 올랐습니다.","공급은 지켰습니다."],
+  ["share","고객사·가스 업체와 함께 공동 구매하고 나눠 쓴다.",[3,2,3,3,1],"혼자 살 때보다 싸게 확보했습니다.","함께 버텼습니다."],
+  ["lean","가스가 꼭 필요한 고부가 제품에만 쓴다.",[4,3,2,1,1],"손실을 효율적으로 줄였습니다.","핵심을 지켰습니다."],
+  ["shift","사용한 가스를 모아 다시 쓰는 재활용 설비를 들인다.",[1,2,3,1,4],"설비가 들어오기까지 시간이 걸립니다.","가스 사용량 자체를 줄일 길이 생겼습니다."]],
+  c:"2022년 러시아의 우크라이나 침공으로 반도체용 네온 가스를 만들던 우크라이나 업체들이 생산을 멈췄습니다. 우크라이나는 세계 네온 공급의 큰 몫을 차지했습니다.",
+  k:["세계 경제의 파편화","탈세계화"]},
+ {t:"2단계 · 대체 공급처",q:"중국산 가스는 구할 수 있지만 가격이 높고, 미중 갈등 속에서 다시 막힐 수도 있습니다. 국내 가스 업체는 국산화를 준비 중입니다.",g:"한 나라에 묶이지 않는 공급처를 만든다",o:[
+  ["safe","당장 구할 수 있는 중국산으로 모두 바꾼다.",[3,3,1,1,1],"공급은 이어졌지만 다른 나라 의존이 생겼습니다.","급한 불은 껐습니다."],
+  ["bold","국산 가스를 비싸게라도 장기 계약한다.",[2,1,4,2,3],"단가가 높지만 공급이 안정됐습니다.","공급 구조를 바꿨습니다."],
+  ["share","국내 가스 업체 국산화에 투자하고 우선 공급권을 받는다.",[2,2,4,4,2],"투자금이 들었지만 국내 공급망이 생겼습니다.","함께 키웠습니다."],
+  ["lean","공급처를 3곳으로 나누고 한 곳이 40%를 넘지 않게 한다(가정).",[3,3,3,1,1],"비용은 조금 올랐고 위험은 줄었습니다.","균형 있게 나눴습니다."],
+  ["shift","네온을 덜 쓰는 공정 기술을 개발한다.",[1,2,3,1,4],"개발에 시간이 걸립니다.","의존 자체를 줄입니다."]],
+  c:"네온 가스 공급 차질 뒤 국내 가스 업체들이 네온 국산화에 나섰고, 2022년 국산 네온 가스 공급이 시작됐습니다(출처 확인 필요).",
+  k:["탈세계화","잠재 비용"]},
+ {t:"3단계 · 원가 전가",q:"가스 값이 오른 만큼 소재 원가가 올랐습니다. 고객사는 불황이라 단가 인상을 받아들이기 어렵다고 합니다.",g:"원가 상승분을 감당할 방법을 찾는다",o:[
+  ["safe","단가를 올리지 않으면 공급을 줄이겠다고 한다.",[2,4,1,0,1],"이익은 지켰지만 고객사와 관계가 나빠졌습니다.","이익을 지켰습니다."],
+  ["bold","원가 상승분을 우리가 모두 떠안고 점유율을 지킨다.",[3,0,2,3,2],"고객은 만족했지만 적자가 났습니다.","관계를 지켰습니다."],
+  ["share","가스 가격에 따라 단가가 자동으로 바뀌는 계약으로 바꾼다.",[3,3,2,3,2],"부담을 함께 나누는 규칙이 생겼습니다.","공정한 구조를 만들었습니다."],
+  ["lean","다른 공정 비용을 줄여 원가 상승분 일부를 메운다.",[3,3,1,1,1],"이익 감소가 줄었습니다.","효율적으로 메웠습니다."],
+  ["shift","원가 상승을 계기로 고성능 제품으로 제품군을 바꾼다.",[1,2,1,1,4],"시간이 걸립니다.","제품 구조를 바꿨습니다."]],
+  c:"실제 사례 연결 없음. 원자재 비용을 고객과 어떻게 나눌지 판단하는 단계입니다.",
+  k:["인플레이션율","스태그플레이션"]},
+ {t:"4단계 · 공급 안정 뒤",q:"가스 가격이 내려왔습니다. 비축과 국산 계약 비용 때문에 다시 가장 싼 공급처로 돌아가자는 의견이 나옵니다.",g:"공급 분산과 원가 경쟁력을 함께 지킨다",o:[
+  ["safe","가장 싼 공급처로 다시 모은다.",[2,4,0,1,2],"원가가 내려갔지만 분산은 사라졌습니다.","원가를 챙겼습니다."],
+  ["bold","국산 공급처 비중을 더 늘린다.",[2,1,4,2,2],"원가는 높지만 공급은 확실합니다.","공급 안정을 택했습니다."],
+  ["share","정부에 희귀 가스 비축 제도를 제안하고 참여한다.",[1,2,3,4,1],"업계 전체의 대비가 생겼습니다.","공동 대비를 만들었습니다."],
+  ["lean","핵심 가스만 6개월분 비축하고 나머지는 싼 곳에서 산다.",[2,3,3,1,1],"적은 비용으로 대비했습니다.","효율적인 균형을 잡았습니다."],
+  ["shift","가스 재활용 설비를 모든 공장에 넣는다.",[1,2,3,1,4],"투자비가 듭니다.","구조적으로 위험을 줄였습니다."]],
+  c:"실제 사례 연결 없음. 위기 뒤 공급망을 다시 짜는 판단 단계입니다.",
+  k:["잠재 비용","탈세계화"]}
+]},
+{id:"c_fx",co:"chip",ty:"금융",grp:"gain",src:"add",title:"강달러를 수출 기회로",cause:"환율",era:"2022",
+ desc:"원·달러 환율이 1,400원을 넘습니다. 수출이 70%인 우리 회사는 같은 물건을 팔아도 원화로 훨씬 더 많이 법니다. 이 이익을 어디에 쓸지가 문제입니다.",
+ w:[20,20,15,15,30],steps:[
+ {t:"1단계 · 환차익 발생",q:"환율 상승으로 이번 분기 원화 매출이 크게 늘었습니다. 해외 고객사들은 '원화가 약해졌으니 달러 가격을 깎아 달라'고 합니다.",g:"환율 효과를 이익과 점유율로 바꾼다",o:[
+  ["safe","달러 가격을 그대로 두고 늘어난 이익을 현금으로 쌓는다.",[2,4,1,1,1],"이익이 크게 늘었습니다. 일부 고객 불만이 생겼습니다.","이익을 챙겼습니다."],
+  ["bold","달러 가격을 크게 낮춰 해외 경쟁사 물량을 빼앗는다.",[4,1,2,2,3],"점유율이 크게 늘었습니다. 환율이 내리면 손해로 바뀝니다.","점유율을 넓혔습니다."],
+  ["share","주요 고객사에만 가격을 조금 낮춰 주고 장기 계약을 맺는다.",[3,3,2,4,2],"관계가 깊어지고 물량이 안정됐습니다.","균형을 맞췄습니다."],
+  ["lean","가격은 유지하고 환율이 높을 때 받은 달러를 바로 원화로 바꾼다.",[3,3,1,1,1],"환율 이익을 확정했습니다.","효율적으로 챙겼습니다."],
+  ["shift","늘어난 이익으로 해외 영업망을 새로 만든다.",[1,2,1,1,4],"성과는 천천히 나옵니다.","새 시장을 준비했습니다."]],
+  c:"2022년 원·달러 환율이 1,400원을 넘자 수출 비중이 큰 기업들의 원화 기준 매출이 늘었습니다. 반대로 원료를 수입하는 기업은 원가 부담이 커졌습니다.",
+  k:["통화 불일치의 대차대조표 효과","신흥시장"]},
+ {t:"2단계 · 수입 원료 비용",q:"수출로 번 만큼, 달러로 사 오는 원료·장비 값도 올랐습니다. 장비 도입 계획이 있습니다.",g:"환율 효과를 그대로 남긴다",o:[
+  ["safe","장비 도입을 환율이 내릴 때까지 미룬다.",[2,4,1,1,1],"비용을 아꼈지만 증설이 늦어졌습니다.","돈을 아꼈습니다."],
+  ["bold","환율이 높아도 장비를 지금 들여 증설한다.",[3,1,3,1,4],"비용이 컸지만 생산 능력이 늘었습니다.","성장에 투자했습니다."],
+  ["share","장비 업체와 대금 일부를 원화로 내는 협상을 한다.",[2,3,2,3,1],"부담이 조금 줄었습니다.","관계를 활용했습니다."],
+  ["lean","수출로 번 달러로 수입 대금을 바로 치른다.",[3,4,1,1,1],"환전 비용과 환율 위험이 함께 줄었습니다.","효율적으로 맞췄습니다."],
+  ["shift","국산 장비로 바꿀 수 있는 것을 찾는다.",[1,2,3,2,3],"검증에 시간이 걸립니다.","수입 의존을 줄였습니다."]],
+  c:"실제 사례 연결 없음. 달러 수입과 지출을 맞추는 '자연 헤지'를 판단하는 단계입니다.",
+  k:["통화 불일치의 대차대조표 효과"]},
+ {t:"3단계 · 이익 활용",q:"환율 덕분에 1년 이익이 계획보다 크게 늘었습니다(가정). 이사회는 배당·투자·부채 상환 중 무엇을 할지 정하라고 합니다.",g:"일시적 이익을 오래가는 힘으로 바꾼다",o:[
+  ["safe","부채를 모두 갚아 무차입 경영을 한다.",[2,4,1,1,2],"이자 부담이 사라졌습니다.","재무가 튼튼해졌습니다."],
+  ["bold","해외 경쟁사 인수에 쓴다.",[2,1,2,1,4],"규모가 커졌지만 인수 부담이 생겼습니다.","크게 성장했습니다."],
+  ["share","직원 성과급과 협력사 단가 인상에 나눈다.",[2,2,2,4,1],"사기가 오르고 협력사가 튼튼해졌습니다.","함께 나눴습니다."],
+  ["lean","배당을 조금 늘리고 나머지는 현금으로 둔다.",[3,3,1,2,1],"주주가 만족했습니다.","무난하게 썼습니다."],
+  ["shift","차세대 소재 연구소를 세운다.",[1,2,2,1,4],"성과는 몇 년 뒤입니다.","미래를 준비했습니다."]],
+  c:"실제 사례 연결 없음. 환율로 생긴 일시적 이익을 어떻게 쓸지 판단하는 단계입니다.",
+  k:["창조적 파괴","투기성 투자"]},
+ {t:"4단계 · 환율 하락",q:"환율이 1,300원대로 내려왔습니다. 1단계에서 정한 가격 정책의 결과가 드러납니다.",g:"환율이 내려도 성과를 지킨다",o:[
+  ["safe","원래 가격으로 돌아가 이익률을 지킨다.",[2,4,1,1,1],"이익률은 지켰습니다.","안정적으로 마무리했습니다."],
+  ["bold","낮춘 가격을 유지해 늘어난 점유율을 지킨다.",[3,1,2,2,3],"이익은 줄었지만 고객이 남았습니다.","점유율을 지켰습니다."],
+  ["share","장기 계약 고객과 환율 변동분을 나누는 조항을 넣는다.",[3,3,2,4,2],"서로 예측 가능해졌습니다.","관계를 지켰습니다."],
+  ["lean","환율이 다시 오를 때를 대비해 일부 달러 매출을 미리 고정한다.",[3,3,1,1,2],"효율적으로 대비했습니다.","무난했습니다."],
+  ["shift","환율에 덜 흔들리도록 해외 생산 거점을 검토한다.",[1,2,3,1,4],"시간이 걸립니다.","구조를 바꿀 준비를 했습니다."]],
+  c:"실제 사례 연결 없음. 환율 효과가 사라진 뒤를 판단하는 단계입니다.",
+  k:["잠재 비용"]}
+]}
+);
+
+
+SCN.forEach(s=>{s.co=s.co||"car"});
 const GROUPS=[
- {k:"loss",t:"피해 최소화",d:"외부 충격이 와서 손실을 줄여야 하는 상황"},
+ {k:"loss",t:"피해 최소화",d:"외부 충격으로 생긴 손실을 줄여야 하는 상황"},
  {k:"gain",t:"이익 극대화",d:"위기를 기회로 바꿀 수 있는 상황"}
 ];
 const GRADES=[[85,"S","이 위기 유형의 핵심 영역에 정확히 맞춘 대응"],[72,"A","핵심 영역을 대체로 지킨 대응"],[60,"B","성향은 뚜렷하지만 이 위기와 일부 어긋난 대응"],[0,"C","이 위기에서 중요한 영역과 다른 곳에 무게를 둔 대응"]];
+const STARS={S:3,A:2,B:1,C:0};
+const starHtml=n=>`<span class="stars" aria-label="별 ${n}개">${"<i>★</i>".repeat(n)}${"★".repeat(3-n)}</span>`;
 
 const $=document.getElementById("app");
 const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
@@ -1149,41 +1699,51 @@ const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(M
 const sum=a=>a.reduce((x,y)=>x+y,0);
 const ws=(o,w)=>sum(o[2].map((v,k)=>v*w[k]));
 const HKEY="crisis-hist-v1";
-// 위기 유형 5개 × (피해 최소화 2 + 이익 극대화 2) = 20개
 const CAUSES=["시장","원자재·에너지","금융","정치·지정학","자연재해·보건"];
 const TY={supply:"시장",gfc:"시장",tesla:"시장",usedcar:"시장",
   oil:"원자재·에너지",lithium:"원자재·에너지",hybrid:"원자재·에너지",lowoil:"원자재·에너지",
   imf:"금융",rate:"금융",acquire:"금융",fxboom:"금융",
   war:"정치·지정학",tariff:"정치·지정학",ira:"정치·지정학",localize:"정치·지정학",
   covid:"자연재해·보건",flood:"자연재해·보건",learn:"자연재해·보건",quakegap:"자연재해·보건"};
-const TAGS={}; SCN.forEach(s=>TAGS[s.id]=[TY[s.id]]);
-const ORDER=SCN.slice().sort((a,b)=>(a.grp===b.grp?0:a.grp==="loss"?-1:1)||CAUSES.indexOf(TY[a.id])-CAUSES.indexOf(TY[b.id]));
+SCN.forEach(s=>{s.ty=s.ty||TY[s.id]});
+const TAGS={}; SCN.forEach(s=>TAGS[s.id]=[s.ty]);
+const ORDER=SCN.slice().sort((a,b)=>COKEYS.indexOf(a.co)-COKEYS.indexOf(b.co)||(a.grp===b.grp?0:a.grp==="loss"?-1:1)||CAUSES.indexOf(a.ty)-CAUSES.indexOf(b.ty));
 const DIFF={
  easy:{n:"쉬움",d:"선지 3개 · 선지마다 중점 영역 표시 · 결과 예측 없음",k:3,hint:true,fb:true,time:0},
- normal:{n:"보통",d:"선지 5개 · 선택할 때마다 결과 확인",k:5,hint:false,fb:true,time:0},
- hard:{n:"어려움",d:"선지 5개 · 단계당 45초 · 결과는 마지막에 공개",k:5,hint:false,fb:false,time:45}
+ normal:{n:"보통",d:"선지 5개 · 고를 때마다 결과 확인",k:5,hint:false,fb:true,time:0},
+ hard:{n:"어려움",d:"선지 5개 · 결정당 45초 · 결과는 마지막에 공개",k:5,hint:false,fb:false,time:45}
 };
-const DELAY=["delay","제한 시간 안에 결정하지 못했다.",[0,1,1,1,0],"결정이 늦어지는 동안 회사는 아무 조치 없이 상황을 맞았습니다.","목표를 위한 조치가 한 단계 늦어졌습니다."];
+const DELAY=["delay","제한 시간 안에 결정하지 못했다.",[0,1,1,1,0],"결정이 늦어지는 동안 회사는 아무 조치 없이 상황을 맞았습니다.","목표를 위한 조치가 한 단계 늦어졌습니다.",[]];
 const styName=k=>k==="delay"?"결정 지연":STY[k].n;
-const FDEF={grp:"all",cause:"all",src:"all",played:"all"};
+const FDEF={grp:"all",cause:"all",played:"all"};
 let st=null, timer=null;
 let diff=store.get("crisis-diff"); if(!DIFF[diff]) diff="normal";
 let F=Object.assign({},FDEF,store.get("crisis-filter")||{});
+Object.keys(F).forEach(k=>{if(!(k in FDEF)) delete F[k]});
 if(F.cause!=="all"&&!CAUSES.includes(F.cause)) F.cause="all";
+// 회사 설정 (회사별 이름·조건을 따로 기억)
+let CS=store.get("crisis-co"); if(!CS||typeof CS!=="object") CS={};
+if(!COS[CS.id]) CS.id="car"; CS.names=CS.names&&typeof CS.names==="object"?CS.names:{}; CS.tr=CS.tr&&typeof CS.tr==="object"?CS.tr:{};
+const coName=k=>{const n=CS.names[k];return typeof n==="string"&&n.trim()?n.trim().slice(0,20):COS[k].n};
+const coTr=k=>{const t=Object.assign({},COS[k].tr,CS.tr[k]||{});Object.keys(TRAITS).forEach(x=>{if(!TRAITS[x].o[t[x]]) t[x]=COS[k].tr[x]});return t};
+const saveCS=()=>store.set("crisis-co",CS);
+const setTheme=k=>{$.className="wrap co-"+k};
+
 const getHist=()=>{const h=store.get(HKEY);return Array.isArray(h)?h:[]};
 const avg=a=>a.length?Math.round(sum(a)/a.length):null;
 const stopTimer=()=>{if(timer){clearInterval(timer);timer=null}};
 const topIdx=a=>{const m=Math.max(...a);return a.reduce((r,v,k)=>v===m?r.concat(k):r,[])};
+const recCo=h=>{if(COS[h.co])return h.co;const s=SCN.find(x=>x.id===h.id);return s?s.co:"car"};
 const abRow=(name,v,ex,top)=>`<div class="dim-row ab-row ${v==null?"na":""} ${top?"top":""}">
-  <div class="h"><span>${esc(name)}</span><b class="mono">${v==null?"–":v}</b></div>
+  <div class="h"><span>${esc(name)}</span><b class="num">${v==null?"–":v}</b></div>
   <div class="track"><i style="width:${v||0}%"></i></div><p class="ex">${ex}</p></div>`;
 
-function nav(v){
-  return `<nav class="nav" aria-label="화면 이동">
-    <button data-v="home" ${v==="home"?'aria-current="page"':""}>시나리오</button>
+function tabs(v){
+  return `<nav class="tabs" aria-label="화면 이동">
+    <button data-v="home" ${v==="home"?'aria-current="page"':""}>회사 살리러 가기</button>
     <button data-v="report" ${v==="report"?'aria-current="page"':""}>나의 경영 리포트</button></nav>`;
 }
-function bindNav(){$.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.v))}
+function bindNav(){$.querySelectorAll(".tabs button").forEach(b=>b.onclick=()=>go(b.dataset.v))}
 function go(v){
   const target=v==="report"?"#report":"";
   if((location.hash||"")===target) route(); else location.hash=target;
@@ -1191,135 +1751,180 @@ function go(v){
 }
 function route(){stopTimer();st=null;if(location.hash==="#report") report(); else home();}
 
-function card(s,hist){
+function stageCard(s,hist,no){
   const mine=hist.filter(h=>h.id===s.id&&h.d===diff);
   const best=mine.length?Math.max(...mine.map(h=>h.t)):null;
-  return `<button class="scn" data-id="${s.id}"><span class="no">${String(ORDER.indexOf(s)+1).padStart(2,"0")}</span>
-      <span class="t">${esc(s.title)}</span>
-      <span class="best">${best!=null?`${DIFF[diff].n} 최고<b>${best}</b>`:"미응시"}</span>
-      <span class="d">${esc(s.desc)}</span>
-      <span class="meta">
-        <span class="chip ${s.src==="set"?"src":"add"}">${s.src==="set"?"배움다짐동행 설정":"추가 사례"}</span>
-        ${TAGS[s.id].map(t=>`<span class="chip">${esc(t)}</span>`).join("")}
-        <span class="chip">${esc(s.era)}</span>
-      </span>
-    </button>`;
+  const g=best!=null?GRADES.find(x=>best>=x[0]):null;
+  return `<button class="stg" data-id="${s.id}">
+    <span class="top"><span>STAGE ${String(no).padStart(2,"0")} · ${esc(s.era)}</span>${starHtml(g?STARS[g[1]]:0)}</span>
+    <span class="t">${esc(s.title)}</span>
+    <span class="d">${esc(s.desc)}</span>
+    <span class="meta">
+      <span class="chip grp-${s.grp}">${s.grp==="loss"?"피해 최소화":"이익 극대화"}</span>
+      <span class="chip">${esc(s.ty)}</span>
+      ${s.src==="set"?`<span class="chip set">배움다짐동행 설정</span>`:""}
+    </span>
+    <span class="best">${best!=null?`${DIFF[diff].n} 최고 <b class="num">${best}</b>점`:"아직 도전하지 않음"}</span>
+  </button>`;
 }
-
-function chips(key,label,items){
+function chipRow(key,label,items){
   return `<div class="frow" role="group" aria-label="${label}"><span class="lb">${label}</span>${items.map(([v,t])=>
     `<button class="fchip" data-f="${key}" data-v="${esc(v)}" aria-pressed="${F[key]===v}">${esc(t)}</button>`).join("")}</div>`;
 }
+function effectList(k){
+  const tr=coTr(k), out=[];
+  RULES.forEach(([sty,on,dk,v,why])=>{if(on(tr)) out.push(`<b>${STY[sty].n}</b> 선택 → ${DIMS[dk]} ${v>0?"+":""}${v}. ${why}`)});
+  WRULES.forEach(([on,ok,d,why])=>{if(on(tr)) out.push(why)});
+  return out;
+}
 
 function home(){
+  const k=CS.id, C=COS[k], tr=coTr(k);
+  setTheme(k);
   const hist=getHist(), played=new Set(hist.map(h=>h.id));
-  const list=ORDER.filter(s=>(F.grp==="all"||s.grp===F.grp)&&(F.cause==="all"||TAGS[s.id].includes(F.cause))&&(F.src==="all"||s.src===F.src)
+  const all=ORDER.filter(s=>s.co===k);
+  const list=all.filter(s=>(F.grp==="all"||s.grp===F.grp)&&(F.cause==="all"||s.ty===F.cause)
     &&(F.played==="all"||(F.played==="done")===played.has(s.id)));
-  const filtered=Object.keys(FDEF).some(k=>F[k]!=="all");
+  const filtered=Object.keys(FDEF).some(x=>F[x]!=="all");
+  const starSum=sum(all.map(s=>{const m=hist.filter(h=>h.id===s.id);if(!m.length)return 0;const b=Math.max(...m.map(h=>h.t));return STARS[GRADES.find(x=>b>=x[0])[1]]}));
+  const causes=[...new Set(all.map(s=>s.ty))];
+  const eff=effectList(k);
   $.innerHTML=`
-  <header class="top">
-    <div class="eyebrow">경영전략실 · 위기대응 모의훈련 · 기업운영 탐구</div>
-    <h1>위기대응 스코어</h1>
-    <p class="muted">실제로 있었던 외부 충격을 아래 가상기업에 옮겼습니다. 먼저 위기를 진단하고, 단계마다 경영 판단 하나를 고른 뒤 그 결정의 예상 효과와 근거를 적습니다. 정답은 정해져 있지 않고, 마지막에 나의 경영 성향, 이 위기 유형에 얼마나 맞게 대응했는지, 진단·판단·예측 같은 능력 평가가 나옵니다.</p>
+  <header class="cover">
+    <div class="band"><span class="tag">위기대응 경영 게임 · 배움다짐동행 기업운영 탐구</span>
+      <h1>기업 살리기</h1>
+      <p>실제로 있었던 외부 충격이 가상 회사를 덮칩니다. 회사를 고르고, 위기마다 경영 판단을 내려 회사를 살려 내세요.</p></div>
+    <div class="body"><span>지금 회사 <b>${esc(coName(k))}</b></span><span>모은 별 <b class="num">${starSum} / ${all.length*3}</b></span><span>스테이지 <b class="num">${all.length}</b>개</span></div>
   </header>
-  ${nav("home")}
-  <section class="co" aria-label="가상기업 설정">
-    <h3>가상기업 설정 <span class="muted" style="font-weight:400;font-size:13px">(모든 수치는 가정)</span></h3>
-    <dl>
-      <dt>업종</dt><dd>국내 중견 완성차, 연 약 40만 대, SUV 중심</dd>
-      <dt>판매</dt><dd>수출 60% (유럽·중남미·중동), 내수 40%</dd>
-      <dt>약점</dt><dd>부품 협상력 약함, 재고 여력 작음, 부채비율 높음, 신용등급이 낮아 조달 금리 높음</dd>
-    </dl>
+  ${tabs("home")}
+  <section class="q" aria-labelledby="q1">
+    <div class="q-h"><span class="q-no">Q1</span><h2 id="q1">살릴 회사를 고르세요 <span class="req">*</span></h2></div>
+    <p class="q-sub">회사마다 겪는 위기가 다릅니다.</p>
+    <div class="cos">${COKEYS.map(x=>`<button class="cobtn co-${x}" data-co="${x}" aria-pressed="${x===k}">
+      <span class="ic" aria-hidden="true">${COS[x].ic}</span><b>${esc(coName(x))}</b><span>${esc(COS[x].ind)}${COS[x].set?" · 배움다짐동행 설정":""}</span></button>`).join("")}</div>
   </section>
-  <section class="grp" aria-label="난이도">
-    <span class="sec-h">난이도</span>
-    <div class="seg">${Object.entries(DIFF).map(([k,v])=>`<button data-diff="${k}" aria-pressed="${diff===k}"><b>${v.n}</b><span>${v.d}</span></button>`).join("")}</div>
+  <section class="q" aria-labelledby="q2">
+    <div class="q-h"><span class="q-no">Q2</span><h2 id="q2">우리 회사 조건을 정하세요</h2><button class="link" id="resetCo">기본값으로</button></div>
+    <p class="q-sub">조건에 따라 같은 선택도 결과가 달라지고, 위기에서 중요한 영역도 바뀝니다. 모든 수치는 가정입니다.</p>
+    <dl class="co-desc"><dt>업종</dt><dd>${esc(C.ind)}</dd>${C.rows.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join("")}</dl>
+    <div class="form-row"><label for="coName">회사 이름</label><input class="txt" id="coName" maxlength="20" value="${esc(coName(k))}" autocomplete="off"></div>
+    ${Object.entries(TRAITS).map(([tk,T])=>`<div class="form-row"><span class="lb">${T.n}</span>
+      <div class="radios" role="radiogroup" aria-label="${T.n}">${Object.entries(T.o).map(([ov,on])=>`<button data-tr="${tk}" data-v="${ov}" aria-pressed="${tr[tk]===ov}">${on}</button>`).join("")}</div></div>`).join("")}
+    <div class="effects"><b>이 조건이 바꾸는 것</b>${eff.length?`<ul>${eff.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<span class="muted">모든 조건이 보통이라 선택지 효과가 그대로 적용됩니다.</span>`}</div>
   </section>
-  <section class="filters" aria-label="시나리오 필터">
-    ${chips("grp","구분",[["all","전체"],["loss","피해 최소화"],["gain","이익 극대화"]])}
-    ${chips("cause","위기 원인",[["all","전체"],...CAUSES.map(c=>[c,c])])}
-    ${chips("src","출처",[["all","전체"],["set","배움다짐동행 설정"],["add","추가 사례"]])}
-    ${chips("played","응시",[["all","전체"],["todo","미응시"],["done","응시함"]])}
+  <section class="q" aria-labelledby="q3">
+    <div class="q-h"><span class="q-no">Q3</span><h2 id="q3">난이도를 고르세요</h2></div>
+    <div class="diffs">${Object.entries(DIFF).map(([dk,v])=>`<button data-diff="${dk}" aria-pressed="${diff===dk}"><b>${v.n}</b><span>${v.d}</span></button>`).join("")}</div>
+  </section>
+  <section class="q" aria-labelledby="q4">
+    <div class="q-h"><span class="q-no">Q4</span><h2 id="q4">도전할 위기를 고르세요</h2>${filtered?`<button class="link" id="clearF">필터 모두 해제</button>`:""}</div>
+    ${chipRow("grp","구분",[["all","전체"],["loss","피해 최소화"],["gain","이익 극대화"]])}
+    ${chipRow("cause","위기 원인",[["all","전체"],...CAUSES.filter(c=>causes.includes(c)).map(c=>[c,c])])}
+    ${chipRow("played","도전",[["all","전체"],["todo","아직 안 함"],["done","해 봄"]])}
   </section>
   ${list.length?GROUPS.map(g=>{const gl=list.filter(s=>s.grp===g.k);return gl.length?`
-  <section class="grp">
-    <div class="grp-h"><h2>${g.t}</h2><span class="muted" style="font-size:13px">${g.d} · ${gl.length}개</span></div>
-    <div class="scn-list">${gl.map(s=>card(s,hist)).join("")}</div>
-  </section>`:""}).join(""):`<div class="empty"><b>조건에 맞는 시나리오가 없습니다.</b><p class="muted">필터를 하나씩 '전체'로 바꾸거나 아래 버튼으로 모두 해제하세요.</p></div>`}
-  ${filtered?`<button class="link" id="clearF" style="align-self:flex-start">필터 모두 해제</button>`:""}
-  <p class="muted note">점수는 '위기 적합도'입니다. 위기 유형마다 중요한 영역의 가중치가 달라서, 같은 성향의 선택도 위기에 따라 점수가 달라집니다. 기록은 이 브라우저에만 저장됩니다. '출처 확인 필요'로 표시된 사실은 보고서에 쓰기 전에 직접 확인하세요.</p>`;
+    <div class="sec-t"><h2>${g.t}</h2><span class="note">${g.d} · ${gl.length}개</span></div>
+    <div class="stages">${gl.map(s=>stageCard(s,hist,all.indexOf(s)+1)).join("")}</div>`:""}).join(""):`<div class="empty"><b>조건에 맞는 위기가 없습니다.</b><p class="muted">필터를 '전체'로 바꾸거나 위의 '필터 모두 해제'를 누르세요.</p></div>`}
+  <p class="note">점수는 '위기 적합도'입니다. 위기마다, 그리고 회사 조건마다 중요한 영역의 가중치가 달라서 같은 선택도 점수가 달라집니다. 기록은 이 브라우저에만 저장됩니다. '출처 확인 필요'로 적힌 사실은 보고서에 쓰기 전에 직접 확인하세요.</p>`;
   bindNav();
+  $.querySelectorAll("[data-co]").forEach(b=>b.onclick=()=>{CS.id=b.dataset.co;saveCS();F.cause="all";store.set("crisis-filter",F);home()});
+  $.querySelectorAll("[data-tr]").forEach(b=>b.onclick=()=>{CS.tr[k]=Object.assign({},coTr(k),{[b.dataset.tr]:b.dataset.v});saveCS();home();const el=$.querySelector(`[data-tr="${b.dataset.tr}"][data-v="${b.dataset.v}"]`);if(el)el.focus()});
+  const nm=$.querySelector("#coName");
+  nm.onchange=()=>{CS.names[k]=nm.value.trim().slice(0,20);saveCS();home()};
+  $.querySelector("#resetCo").onclick=()=>{delete CS.names[k];delete CS.tr[k];saveCS();home()};
   $.querySelectorAll("[data-diff]").forEach(b=>b.onclick=()=>{diff=b.dataset.diff;store.set("crisis-diff",diff);home()});
   $.querySelectorAll(".fchip").forEach(b=>b.onclick=()=>{F[b.dataset.f]=b.dataset.v;store.set("crisis-filter",F);home()});
   const cf=$.querySelector("#clearF"); if(cf) cf.onclick=()=>{F=Object.assign({},FDEF);store.set("crisis-filter",F);home()};
-  $.querySelectorAll(".scn").forEach(b=>b.onclick=()=>{start(b.dataset.id);window.scrollTo(0,0)});
+  $.querySelectorAll(".stg").forEach(b=>b.onclick=()=>{start(b.dataset.id);window.scrollTo(0,0)});
 }
 
 function start(id){
-  const sc=SCN.find(s=>s.id===id), D=DIFF[diff];
-  st={sc,d:diff,i:0,picks:[],pred:[],why:[],dx:null,opts:sc.steps.map(s=>shuffle(s.o).slice(0,D.k)),shown:false,memo:false,deadline:0};
+  const sc=SCN.find(s=>s.id===id), D=DIFF[diff], tr=coTr(sc.co);
+  setTheme(sc.co);
+  st={sc,d:diff,co:sc.co,cn:coName(sc.co),tr,w:weightsFor(sc,tr),i:0,picks:[],pred:[],why:[],dx:null,
+    opts:sc.steps.map(s=>shuffle(s.o).slice(0,D.k).map(o=>modOpt(o,tr))),shown:false,memo:false,deadline:0,
+    g:gaugeStart(tr),gd:null};
   diagnose();
 }
+const lv=v=>v>=60?"lv-good":v>=30?"lv-warn":"lv-bad";
+function hud(){
+  return `<div class="hud" aria-label="회사 상태">${DIMS.map((d,k)=>{const v=st.g[k], dd=st.gd&&st.shown?st.gd[k]:0;
+    return `<div class="gg"><span class="l" title="${esc(d)}">${DSHORT[k]}</span><span class="bar"><i class="${lv(v)}" style="width:${v}%"></i></span>
+    <span class="v num">${v}${dd?`<span class="dl ${dd>0?"up":"dn"}">${dd>0?"▲":"▼"}${Math.abs(dd)}</span>`:""}</span></div>`}).join("")}</div>`;
+}
+function progBox(label,frac){
+  return `<div class="prog"><div class="row"><span>${label}</span><span class="muted">${esc(st.cn)} · ${DIFF[st.d].n}</span></div>
+    <div class="track"><i style="width:${Math.round(frac*100)}%"></i></div>${hud()}</div>`;
+}
 function diagnose(){
-  const {sc}=st, D=DIFF[st.d];
+  const {sc}=st;
   $.innerHTML=`
-  <div class="bar"><span class="eyebrow">${esc(sc.title)} · ${D.n} · 사전 진단</span><button class="link" id="quit">처음으로</button></div>
-  <section class="sit"><span class="clock">사전 진단 · 결정 전</span><p>${esc(sc.desc)}</p>
-    <div class="goal"><b>질문</b><span>이 위기에서 회사가 가장 먼저 지켜야 할 영역은 무엇일까요?</span></div></section>
-  <div class="opts" role="group" aria-label="영역">${DIMS.map((d,k)=>`
-    <button class="opt" data-k="${k}"><span class="k">${k+1}</span><span class="body"><b>${esc(d)}</b><span class="ds">${esc(DDESC[k])}</span></span></button>`).join("")}</div>
-  <p class="muted note">답은 결과 화면에서 공개됩니다. 이 답은 '위기 진단력'에만 들어가고 위기 적합도에는 들어가지 않습니다.</p>`;
+  <div class="bar"><span class="crumb">${esc(sc.title)}</span><button class="link" id="quit">그만두기</button></div>
+  ${progBox("사전 진단",0)}
+  <section class="q">
+    <div class="q-h"><span class="q-no">Q0</span><h2>이 위기에서 회사가 가장 먼저 지켜야 할 영역은? <span class="req">*</span></h2></div>
+    <p class="sit-q">${esc(sc.desc)}</p>
+    <div class="opts" role="radiogroup" aria-label="영역">${DIMS.map((d,k)=>`
+      <button class="opt" data-k="${k}"><span class="rd" aria-hidden="true"></span><span class="body"><b>${esc(d)}</b><span class="ds">${esc(DDESC[k])}</span></span></button>`).join("")}</div>
+    <p class="note">답은 결과 화면에서 공개됩니다. '위기 진단력'에만 들어가고 위기 적합도에는 들어가지 않습니다.</p>
+  </section>`;
   $.querySelector("#quit").onclick=()=>go("home");
   $.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{st.dx=+b.dataset.k;play();window.scrollTo(0,0)});
 }
 const hintOf=o=>{const idx=[0,1,2,3,4].sort((a,b)=>o[2][b]-o[2][a]).slice(0,2);return "중점: "+idx.map(k=>DIMS[k]).join(" · ")};
-function after(){if(DIFF[st.d].fb){st.shown=true;play()}else next()}
+function applyGauge(o){st.gd=o[2].map(v=>(v-2)*7);st.g=st.g.map((v,k)=>clamp(v+st.gd[k],0,100))}
+function after(){applyGauge(st.picks[st.i]);if(DIFF[st.d].fb){st.shown=true;play()}else next()}
 function choose(o){stopTimer();st.picks[st.i]=o;st.deadline=0;if(o===DELAY){after();return}st.memo=true;play()}
-function next(){if(st.i<st.sc.steps.length-1){st.i++;st.shown=false;st.memo=false;st.deadline=0;play();window.scrollTo(0,0)}else result()}
+function next(){st.gd=null;if(st.i<st.sc.steps.length-1){st.i++;st.shown=false;st.memo=false;st.deadline=0;play();window.scrollTo(0,0)}else result()}
 function tick(){
   const el=$.querySelector("#tm"); if(!st||!el){stopTimer();return}
   const left=Math.max(0,Math.ceil((st.deadline-Date.now())/1000));
   el.textContent=`남은 시간 ${left}초`; el.classList.toggle("low",left<=10);
   if(left<=0) choose(DELAY);
 }
-
 function caseBox(step){
   return `<div class="case"><b>실제 사례</b><p>${esc(step.c)}</p>
     ${step.k&&step.k.length?`<div class="kw" aria-label="연결 개념">${step.k.map(x=>`<span>${esc(x)}</span>`).join("")}</div>`:""}</div>`;
 }
-
 function play(){
   stopTimer();
-  const D=DIFF[st.d], {sc,i}=st, step=sc.steps[i], opts=st.opts[i], pick=st.picks[i];
+  const D=DIFF[st.d], {sc,i}=st, step=sc.steps[i], opts=st.opts[i], pick=st.picks[i], n=sc.steps.length;
   const locked=st.memo||st.shown, timed=D.time&&!locked;
   let fb="",memo="";
   if(st.memo){
-    memo=`<section class="memo" aria-label="결재 의견">
-      <h3>결재 의견 <span class="muted" style="font-weight:400;font-size:13px">시간 제한 없음</span></h3>
-      ${D.hint?"":`<div class="row"><b>예측</b><div><span style="font-size:14px">이 결정이 가장 크게 도움이 되는 영역은 어디일까요?</span>
-        <div class="chips" role="group" aria-label="예측 영역">${DIMS.map((d,k)=>`<button class="fchip" data-p="${k}" aria-pressed="false">${esc(d)}</button>`).join("")}</div></div></div>`}
-      <div class="row"><b>근거</b><div><textarea id="why" maxlength="150" aria-label="결정 근거" placeholder="이 방식을 고른 이유를 한 줄로 적어 보세요 (선택)"></textarea></div></div>
-      <div class="foot"><button class="cta" id="sign" ${D.hint?"":"disabled"}>결재</button><span class="muted note" id="signNote">${D.hint?"근거는 비워 둬도 됩니다.":"예측할 영역을 고르면 결재할 수 있습니다. 근거는 비워 둬도 됩니다."}</span></div>
+    memo=`<section class="q" aria-label="결정 메모">
+      <div class="q-h"><span class="q-no">✎</span><h2>결정 메모</h2><span class="note">시간 제한 없음</span></div>
+      ${D.hint?"":`<div class="memo-row"><b>이 결정이 가장 크게 도움이 되는 영역은? <span class="req">*</span></b>
+        <div class="chips" role="group" aria-label="예측 영역">${DIMS.map((d,k)=>`<button class="fchip" data-p="${k}" aria-pressed="false">${esc(d)}</button>`).join("")}</div></div>`}
+      <div class="memo-row"><label for="why"><b>고른 이유</b> <span class="note">(선택)</span></label><textarea class="txt" id="why" maxlength="150" placeholder="이 방식을 고른 이유를 한 줄로 적어 보세요"></textarea></div>
+      <div class="foot"><button class="cta" id="sign" ${D.hint?"":"disabled"}>결정하기</button><span class="note" id="signNote">${D.hint?"이유는 비워 둬도 됩니다.":"예측할 영역을 고르면 결정할 수 있습니다."}</span></div>
     </section>`;
   }
   if(st.shown){
     const pr=st.pred[i], tops=topIdx(pick[2]);
-    fb=`<div class="fb" role="status">
+    fb=`<section class="q" role="status" aria-label="결정 결과">
+      <div class="q-h"><span class="q-no">!</span><h2>결정 결과</h2></div>
       <div class="fb-row"><b>이 선택의 영향</b><p>${esc(pick[3])}</p></div>
       <div class="fb-row"><b>목표에 미친 결과</b><p>${esc(pick[4])}</p></div>
-      ${pr!=null?`<div class="fb-row"><b>예측 확인</b><p>내 예측 <b>${esc(DIMS[pr])}</b> · 가장 크게 도움이 된 영역 <b>${esc(tops.map(k=>DIMS[k]).join(", "))}</b> · ${tops.includes(pr)?"예측과 같음":"예측과 다름"}</p></div>`:""}
-      ${caseBox(step)}</div>
-    <button class="cta" id="next">${i<sc.steps.length-1?"다음 상황":"결과 보기"}</button>`;
+      ${pick[5]&&pick[5].length?`<div class="fb-row trait"><b>우리 회사 조건 때문에</b><p>${pick[5].map(esc).join("<br>")}</p></div>`:""}
+      ${pr!=null?`<div class="fb-row"><b>예측 확인</b><p>내 예측 <b>${esc(DIMS[pr])}</b> · 가장 크게 도움이 된 영역 <b>${esc(tops.map(k=>DIMS[k]).join(", "))}</b> · ${tops.includes(pr)?"맞았습니다":"달랐습니다"}</p></div>`:""}
+      ${caseBox(step)}
+      <div><button class="cta" id="next">${i<n-1?"다음 위기로":"결과 보기"}</button></div>
+    </section>`;
   }
   $.innerHTML=`
-  <div class="bar"><span class="eyebrow">${esc(sc.title)} · ${D.n}</span><button class="link" id="quit">처음으로</button></div>
-  <div class="sign" aria-label="결재 진행 ${i+1}/${sc.steps.length}">${sc.steps.map((_,n)=>`<div class="sg ${n<i||(n===i&&st.shown)?"done":n===i?"now":""}"><span>${n+1}차 결정</span><i></i></div>`).join("")}</div>
-  <section class="sit"><span class="clock">${esc(step.t)} · 결정 ${i+1}/${sc.steps.length}${timed?` · <span class="timer" id="tm" aria-live="off"></span>`:""}</span><p>${esc(step.q)}</p>
-    <div class="goal"><b>목표</b><span>${esc(step.g)}</span></div></section>
-  <div class="opts" role="group" aria-label="선택지">${opts.map((o,n)=>`
-    <button class="opt ${locked?(o===pick?"pick":"dim"):""}" data-n="${n}" ${locked?"disabled":""}>
-      <span class="k">${"ABCDE"[n]}</span><span class="body"><span>${esc(o[1])}</span>${D.hint?`<span class="hint">${esc(hintOf(o))}</span>`:""}</span></button>`).join("")}</div>
-  ${st.shown&&pick===DELAY?`<p class="muted note">제한 시간이 지나 '결정 지연'으로 기록됐습니다.</p>`:""}
+  <div class="bar"><span class="crumb">${esc(sc.title)}</span><button class="link" id="quit">그만두기</button></div>
+  ${progBox(`결정 ${i+1} / ${n}`,(i+(st.shown?1:0))/n)}
+  <section class="q">
+    <div class="q-h"><span class="q-no">Q${i+1}</span><h2>${esc(step.t)}</h2></div>
+    ${timed?`<div class="sit-t"><span class="timer" id="tm" aria-live="off"></span></div>`:""}
+    <p class="sit-q">${esc(step.q)}</p>
+    <div class="goal"><b>목표</b><span>${esc(step.g)}</span></div>
+    <div class="opts" role="radiogroup" aria-label="선택지">${opts.map((o,m)=>`
+      <button class="opt ${locked?(o===pick?"pick":"dim"):""}" data-n="${m}" ${locked?"disabled":""}>
+        <span class="rd" aria-hidden="true"></span><span class="body"><span>${esc(o[1])}</span>${D.hint?`<span class="hint">${esc(hintOf(o))}</span>`:""}</span></button>`).join("")}</div>
+    ${st.shown&&pick===DELAY?`<p class="note">제한 시간이 지나 '결정 지연'으로 기록됐습니다.</p>`:""}
+  </section>
   ${memo}${fb}`;
   $.querySelector("#quit").onclick=()=>go("home");
   if(st.memo){
@@ -1327,44 +1932,44 @@ function play(){
     $.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{
       p=+b.dataset.p;
       $.querySelectorAll("[data-p]").forEach(x=>x.setAttribute("aria-pressed",x===b));
-      sign.disabled=false; $.querySelector("#signNote").textContent="근거는 비워 둬도 됩니다.";
+      sign.disabled=false; $.querySelector("#signNote").textContent="이유는 비워 둬도 됩니다.";
     });
     sign.onclick=()=>{st.pred[i]=p;st.why[i]=$.querySelector("#why").value.trim().slice(0,150);st.memo=false;after()};
-    const m=$.querySelector(".memo"); if(m&&m.scrollIntoView) m.scrollIntoView({block:"nearest",behavior:"smooth"});
+    const m=sign.closest(".q"); if(m&&m.scrollIntoView) m.scrollIntoView({block:"nearest",behavior:"smooth"});
   }
   else if(!st.shown) $.querySelectorAll(".opt").forEach(b=>b.onclick=()=>choose(opts[+b.dataset.n]));
-  else $.querySelector("#next").onclick=next;
+  else {$.querySelector("#next").onclick=next; const f=$.querySelector("[role=status]"); if(f&&f.scrollIntoView) f.scrollIntoView({block:"nearest",behavior:"smooth"})}
   if(timed){if(!st.deadline) st.deadline=Date.now()+D.time*1000; tick(); timer=setInterval(tick,250)}
 }
 
 function calc(){
-  const {sc,picks,opts}=st;
+  const {picks,opts,w}=st, sc=st.sc;
   const dimScore=DIMS.map((d,k)=>{
     const max=sum(opts.map(os=>Math.max(...os.map(o=>o[2][k]))));
     return max?Math.round(sum(picks.map(o=>o[2][k]))/max*100):0;
   });
-  const got=sum(picks.map(o=>ws(o,sc.w)));
-  const max=sum(opts.map(os=>Math.max(...os.map(o=>ws(o,sc.w)))));
+  const got=sum(picks.map(o=>ws(o,w)));
+  const max=sum(opts.map(os=>Math.max(...os.map(o=>ws(o,w)))));
   const cnt={};SKEYS.forEach(k=>cnt[k]=0);picks.forEach(o=>{if(cnt[o[0]]!=null)cnt[o[0]]++});
-  // 능력 지표
-  const n=picks.length, wTop=topIdx(sc.w), hitW=o=>topIdx(o[2]).some(k=>wTop.includes(k));
+  const n=picks.length, wTop=topIdx(w), hitW=o=>topIdx(o[2]).some(k=>wTop.includes(k));
   let jH=0,jD=0,aH=0,pH=0,pD=0; const fit=[],bestSty=[],kc={};
   picks.forEach((o,i)=>{
     const os=opts[i];
     if(os.some(hitW)){jD++; if(o!==DELAY&&hitW(o)) jH++}
-    const b=Math.max(...os.map(x=>ws(x,sc.w)));
-    const bs=[...new Set(os.filter(x=>ws(x,sc.w)===b).map(x=>x[0]))]; bestSty.push(bs);
+    const b=Math.max(...os.map(x=>ws(x,w)));
+    const bs=[...new Set(os.filter(x=>ws(x,w)===b).map(x=>x[0]))]; bestSty.push(bs);
     if(bs.includes(o[0])) aH++;
-    const f=Math.round(ws(o,sc.w)/b*100); fit.push(f);
+    const f=Math.round(ws(o,w)/b*100); fit.push(f);
     (sc.steps[i].k||[]).forEach(c=>{kc[c]=kc[c]||[0,0];kc[c][0]+=f;kc[c][1]++});
     if(st.pred[i]!=null){pD++; if(topIdx(o[2]).includes(st.pred[i])) pH++}
   });
-  const neg=DIMS.map((_,k)=>k).filter(k=>picks.filter(o=>o[2][k]<=1).length>=Math.ceil(n*.8));
-  const tiers=[...new Set(sc.w)].sort((a,b)=>b-a), dx=st.dx;
+  const need=Math.ceil(n*.8);
+  const neg=DIMS.map((_,k)=>k).filter(k=>picks.filter(o=>o[2][k]<=1).length>=need);
+  const tiers=[...new Set(w)].sort((a,b)=>b-a), dx=st.dx;
   const pct=(a,b)=>b?Math.round(a/b*100):null;
-  const ab={dx:dx==null?null:sc.w[dx]===tiers[0]?100:sc.w[dx]===tiers[1]?50:0,
+  const ab={dx:dx==null?null:w[dx]===tiers[0]?100:w[dx]===tiers[1]?50:0,
     judge:pct(jH,jD),adapt:pct(aH,n),bal:Math.max(0,100-25*neg.length),pred:pct(pH,pD)};
-  return {dimScore,total:Math.round(got/max*100),cnt,ab,pr:pD?[pH,pD]:null,neg,kc,fit,bestSty,wTop};
+  return {dimScore,total:Math.round(got/max*100),cnt,ab,pr:pD?[pH,pD]:null,neg,need,kc,fit,bestSty,wTop};
 }
 
 function styleBlock(cnt,n){
@@ -1378,23 +1983,21 @@ function styleBlock(cnt,n){
     </div>
     <div class="dims">${SKEYS.map(k=>`
       <div class="dim-row ${tie.includes(k)?"top":""}">
-        <div class="h"><span>${STY[k].n}</span><b class="mono">${cnt[k]} / ${n}</b></div>
+        <div class="h"><span>${STY[k].n}</span><b class="num">${cnt[k]} / ${n}</b></div>
         <div class="track"><i style="width:${n?cnt[k]/n*100:0}%"></i></div>
       </div>`).join("")}</div>`;
 }
-
 function dimBlock(vals,w){
   const maxDim=Math.max(...vals);
   return `<div class="two">
       ${radar(vals)}
       <div class="dims">${DIMS.map((d,k)=>`
         <div class="dim-row ${vals[k]===maxDim?"top":""}">
-          <div class="h"><span>${esc(d)}${w?`<small>가중치 ${w[k]}</small>`:""}</span><b class="mono">${vals[k]}</b></div>
+          <div class="h"><span>${esc(d)}${w?`<small>가중치 ${w[k]}</small>`:""}</span><b class="num">${vals[k]}</b></div>
           <div class="track"><i style="width:${vals[k]}%"></i></div>
         </div>`).join("")}</div>
     </div>`;
 }
-
 function radar(vals){
   const cx=160,cy=150,R=100,n=DIMS.length;
   const pt=(k,v)=>{const a=-Math.PI/2+k*2*Math.PI/n;return [cx+Math.cos(a)*R*v/100,cy+Math.sin(a)*R*v/100]};
@@ -1406,62 +2009,74 @@ function radar(vals){
   return `<svg class="radar" viewBox="-10 0 340 300" role="img" aria-label="영역별 비중 레이더 차트: ${DIMS.map((d,k)=>d+" "+vals[k]).join(", ")}">
     ${[25,50,75,100].map(v=>`<polygon points="${ring(v)}" fill="none" stroke="var(--line)" stroke-width="1"/>`).join("")}
     ${DIMS.map((_,k)=>{const [x,y]=pt(k,100);return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--line)"/>`}).join("")}
-    <polygon points="${poly}" fill="var(--accent)" fill-opacity=".22" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>
-    ${vals.map((v,k)=>{const [x,y]=pt(k,v);return `<circle cx="${x}" cy="${y}" r="3.5" fill="var(--accent)"/>`}).join("")}
+    <polygon points="${poly}" fill="var(--co)" fill-opacity=".22" stroke="var(--co)" stroke-width="2" stroke-linejoin="round"/>
+    ${vals.map((v,k)=>{const [x,y]=pt(k,v);return `<circle cx="${x}" cy="${y}" r="3.5" fill="var(--co)"/>`}).join("")}
     ${labels}</svg>`;
+}
+function surviveMsg(g){
+  const m=Math.min(...g), k=g.indexOf(m);
+  if(m>=30) return ["회사가 위기를 이겨 냈습니다.",`가장 낮은 영역도 ${m}입니다.`];
+  if(m>=10) return ["간신히 버텼습니다.",`<b>${esc(DIMS[k])}</b>이(가) ${m}까지 떨어졌습니다. 다음 충격이 오면 위험합니다.`];
+  return ["회사가 무너지기 직전입니다.",`<b>${esc(DIMS[k])}</b>이(가) ${m}입니다. 이 부분이 무너지면 다른 영역이 좋아도 회사가 버티기 어렵습니다.`];
 }
 
 function result(){
   stopTimer();
-  const {sc,picks,d}=st, {dimScore,total,cnt,ab,pr,neg,kc,bestSty,wTop}=calc();
+  const {sc,picks,d,w}=st, {dimScore,total,cnt,ab,pr,neg,need,kc,bestSty,wTop}=calc();
   const g=GRADES.find(x=>total>=x[0]);
   const hist=getHist();
   const prevBest=Math.max(-1,...hist.filter(h=>h.id===sc.id&&h.d===d).map(h=>h.t));
-  hist.push({id:sc.id,d,t:total,dims:dimScore,cnt,at:Date.now(),ab,pr,neg,kc,
+  hist.push({id:sc.id,d,t:total,dims:dimScore,cnt,at:Date.now(),ab,pr,neg,kc,co:st.co,tr:st.tr,
     to:picks.filter(o=>o===DELAY).length,sty:picks.map(o=>o[0]),why:sc.steps.map((_,n)=>st.why[n]||"")});
   store.set(HKEY,hist.slice(-300));
   const isBest=total>prevBest;
-  const topW=sc.w.indexOf(Math.max(...sc.w));
+  const topW=w.indexOf(Math.max(...w));
+  const sv=surviveMsg(st.g);
   const predNote=d==="easy"?"쉬움 난이도는 선지마다 중점 영역이 보여서 측정하지 않습니다.":"예측한 결정이 없어 계산하지 않았습니다.";
   const exOf=k=>{
-    if(k==="dx") return st.dx==null?"사전 진단을 하지 않았습니다.":`내가 꼽은 영역 <b>${esc(DIMS[st.dx])}</b> · 이 위기의 1순위 <b>${esc(wTop.map(x=>DIMS[x]).join(", "))}</b>(가중치 ${sc.w[wTop[0]]}). 1순위면 100, 2순위면 50`;
+    if(k==="dx") return st.dx==null?"사전 진단을 하지 않았습니다.":`내가 꼽은 영역 <b>${esc(DIMS[st.dx])}</b> · 이 위기의 1순위 <b>${esc(wTop.map(x=>DIMS[x]).join(", "))}</b>(가중치 ${w[wTop[0]]}). 1순위면 100, 2순위면 50`;
     if(k==="pred") return ab.pred==null?predNote:`${pr[1]}번 예측 가운데 ${pr[0]}번 맞음`;
-    if(k==="bal") return neg.length?`계속 비워 둔 영역: <b>${esc(neg.map(x=>DIMS[x]).join(", "))}</b> (결정 5번 중 4번 이상 0~1점)`:"계속 비워 둔 영역이 없습니다.";
+    if(k==="bal") return neg.length?`계속 비워 둔 영역: <b>${esc(neg.map(x=>DIMS[x]).join(", "))}</b> (결정 ${picks.length}번 중 ${need}번 이상 0~1점)`:"계속 비워 둔 영역이 없습니다.";
     return esc(ABS.find(a=>a[0]===k)[2]);
   };
+  const changedW=w.some((v,k)=>v!==sc.w[k]);
   $.innerHTML=`
-  <div class="bar"><span class="eyebrow">${esc(sc.title)} · ${DIFF[d].n} · 결과</span><button class="link" id="home">처음으로</button></div>
+  <div class="bar"><span class="crumb">${esc(sc.title)} · 결과</span><button class="link" id="home">처음으로</button></div>
   <section class="score">
-    <div class="n">${total}<small> / 100</small></div>
-    <div class="g"><span class="grade">위기 적합도 ${g[1]}</span><b>${g[2]}</b><span class="muted" style="font-size:13px">${isBest?`${DIFF[d].n} 난이도에서 이 시나리오의 최고 기록입니다.`:`${DIFF[d].n} 난이도 최고 기록 ${prevBest}점`}</span></div>
-    <span class="stamp" aria-hidden="true">${g[1]}</span>
+    <div class="band">
+      <div class="n">${total}<small> / 100점</small></div>
+      <div class="g"><span class="grade">위기 적합도 ${g[1]}등급</span><b>${g[2]}</b></div>
+      <span class="medal" aria-hidden="true">${g[1]}</span>
+    </div>
+    <div class="sub">${starHtml(STARS[g[1]])}<span>${isBest?`${DIFF[d].n} 난이도에서 이 위기의 최고 기록입니다.`:`${DIFF[d].n} 난이도 최고 기록 ${prevBest}점`}</span><span class="muted">${esc(st.cn)}</span></div>
   </section>
-  <section class="card"><h2>이번 도전의 능력 평가</h2>
-    <p class="muted" style="font-size:14px">성향과 따로 본 능력입니다. 0~100으로 표시합니다.</p>
+  <section class="q survive"><div class="q-h"><h2>회사 상태</h2></div>
+    <p class="msg">${sv[0]}</p><p class="note">${sv[1]} 회사 상태는 결정마다 움직인 결과이고, 점수와는 따로 봅니다.</p>${hud()}</section>
+  <section class="q"><div class="q-h"><h2>이번 도전의 능력 평가</h2></div>
+    <p class="q-sub">성향과 따로 본 능력입니다. 0~100으로 표시합니다.</p>
     <div class="dims">${["dx","judge","adapt","bal","pred"].map(k=>abRow(ABS.find(a=>a[0]===k)[1],ab[k],exOf(k))).join("")}</div>
   </section>
-  <section class="card"><h2>나의 경영 성향</h2>${styleBlock(cnt,picks.length)}</section>
-  <section class="card">
-    <h2>내가 무게를 둔 영역</h2>
-    <p class="muted" style="font-size:14px">보기로 나온 선택지에서 얻을 수 있었던 최대치 대비 비율입니다. 이 위기에서 가장 중요한 영역은 <b style="color:var(--fg)">${esc(DIMS[topW])}</b>(가중치 ${sc.w[topW]})입니다.</p>
-    ${dimBlock(dimScore,sc.w)}
+  <section class="q"><div class="q-h"><h2>나의 경영 성향</h2></div>${styleBlock(cnt,picks.length)}</section>
+  <section class="q"><div class="q-h"><h2>내가 무게를 둔 영역</h2></div>
+    <p class="q-sub">보기로 나온 선택지에서 얻을 수 있었던 최대치 대비 비율입니다. 이 위기에서 가장 중요한 영역은 <b style="color:var(--fg)">${esc(DIMS[topW])}</b>(가중치 ${w[topW]})입니다.${changedW?` 가중치는 ${esc(st.cn)}의 조건에 맞게 조정됐습니다.`:""}</p>
+    ${dimBlock(dimScore,w)}
   </section>
-  <section class="card">
-    <h2>단계별 복기</h2>
-    <div class="rev">${sc.steps.map((s,n)=>{const me=picks[n], p=st.pred[n], tops=topIdx(me[2]), w=st.why[n];
+  <section class="q"><div class="q-h"><h2>단계별 복기</h2></div>
+    <div class="rev">${sc.steps.map((s,n)=>{const me=picks[n], p=st.pred[n], tops=topIdx(me[2]), wy=st.why[n];
       return `<div class="rev-item">
-        <div class="mono muted" style="font-size:12px">${esc(s.t)}</div>
-        <div class="q">${esc(s.g)}</div>
+        <div class="note">Q${n+1} · ${esc(s.t)}</div>
+        <div class="q2">${esc(s.g)}</div>
         <div class="a"><span class="chip sty">${styName(me[0])}</span> ${esc(me[1])}</div>
-        ${w?`<div class="why">내 근거: ${esc(w)}</div>`:""}
+        ${wy?`<div class="why">내 이유: ${esc(wy)}</div>`:""}
         <div class="a"><span class="l">영향</span>${esc(me[3])}</div>
         <div class="a"><span class="l">결과</span>${esc(me[4])}</div>
+        ${me[5]&&me[5].length?`<div class="a" style="color:var(--info)"><span class="l">조건</span>${me[5].map(esc).join(" ")}</div>`:""}
         ${p!=null?`<div class="a"><span class="l">예측</span>${esc(DIMS[p])} → 실제로 가장 크게 도움이 된 영역 ${esc(tops.map(k=>DIMS[k]).join(", "))} (${tops.includes(p)?"같음":"다름"})</div>`:""}
         <div class="a"><span class="l">비교</span>이 상황에서 적합도가 가장 높았던 방식: ${esc(bestSty[n].map(styName).join(", "))}</div>
         ${caseBox(s)}
       </div>`}).join("")}</div>
   </section>
-  <div class="actions"><button class="cta" id="retry">다른 성향으로 다시 해 보기</button><button class="ghost" id="other">다른 시나리오</button><button class="ghost" id="rep">나의 경영 리포트</button></div>`;
+  <div class="actions"><button class="cta" id="retry">다른 방식으로 다시 도전</button><button class="ghost" id="other">다른 위기 고르기</button><button class="ghost" id="rep">나의 경영 리포트</button></div>`;
   $.querySelector("#home").onclick=()=>go("home");
   $.querySelector("#other").onclick=()=>go("home");
   $.querySelector("#rep").onclick=()=>go("report");
@@ -1480,7 +2095,6 @@ function decHist(s){
   if(!Array.isArray(h)) return null;
   return h.filter(r=>r&&typeof r==="object"&&typeof r.id==="string"&&SCN.some(x=>x.id===r.id)&&isNum(r.t)&&isNum(r.at)).map(cleanRec);
 }
-// 불러온 기록은 형식을 다시 맞춰서 저장 (깨진 값이 리포트를 망가뜨리지 않게)
 const isNum=v=>typeof v==="number"&&isFinite(v);
 const pctN=v=>isNum(v)?Math.max(0,Math.min(100,Math.round(v))):null;
 function cleanRec(r){
@@ -1494,6 +2108,8 @@ function cleanRec(r){
   if(isNum(r.to)) o.to=Math.max(0,Math.min(5,r.to|0));
   if(Array.isArray(r.sty)) o.sty=r.sty.map(s=>STY[s]||s==="delay"?s:"delay").slice(0,5);
   if(Array.isArray(r.why)) o.why=r.why.slice(0,5).map(w=>typeof w==="string"?w.slice(0,150):"");
+  if(COS[r.co]) o.co=r.co;
+  if(r.tr&&typeof r.tr==="object"){o.tr={};Object.keys(TRAITS).forEach(x=>{if(TRAITS[x].o[r.tr[x]]) o.tr[x]=r.tr[x]})}
   return o;
 }
 function mergeHist(inc){
@@ -1504,15 +2120,13 @@ function mergeHist(inc){
 }
 const canFile=(()=>{try{return window.self===window.top}catch(e){return false}})();
 function xferCard(has){
-  return `<section class="card" id="xfer"><h2>기록 옮기기</h2>
-    <p class="muted" style="font-size:14px">다른 기기나 브라우저로 기록을 옮길 때 씁니다. 기록은 서버에 저장되지 않고, 코드에는 이름 같은 개인정보가 들어가지 않습니다(결정 근거로 적은 글은 들어갑니다). 불러오면 지금 기록에 합쳐지고 겹치는 기록은 한 번만 남습니다.</p>
+  return `<section class="q" id="xfer"><div class="q-h"><h2>기록 옮기기</h2></div>
+    <p class="q-sub">다른 기기나 브라우저로 기록을 옮길 때 씁니다. 기록은 서버에 저장되지 않고, 코드에는 이름 같은 개인정보가 들어가지 않습니다(결정 이유로 적은 글과 회사 조건은 들어갑니다). 불러오면 지금 기록에 합쳐지고 겹치는 기록은 한 번만 남습니다.</p>
     ${has?`<div class="actions"><button class="cta" id="xCopy">기록 코드 복사</button>${canFile?`<button class="ghost" id="xFile">파일로 저장</button>`:""}</div>
-    <textarea id="xOut" readonly hidden aria-label="기록 코드" style="width:100%;min-height:80px;font:12px var(--font-mono);background:var(--soft);color:var(--fg);border:1px solid var(--line);padding:8px"></textarea>`:""}
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <textarea id="xIn" aria-label="불러올 기록 코드" placeholder="복사해 둔 기록 코드를 붙여 넣으세요" style="width:100%;min-height:64px;font:13px var(--font-mono);background:var(--surface);color:var(--fg);border:1px solid var(--line);padding:8px"></textarea>
-      <div class="actions"><button class="ghost" id="xLoad">코드로 불러오기</button>
-      <label class="ghost" style="display:inline-block">파일로 불러오기<input type="file" id="xPick" accept=".json,.txt,application/json,text/plain" hidden></label></div>
-    </div>
+    <textarea class="txt code" id="xOut" readonly hidden aria-label="기록 코드"></textarea>`:""}
+    <textarea class="txt code" id="xIn" aria-label="불러올 기록 코드" placeholder="복사해 둔 기록 코드를 붙여 넣으세요"></textarea>
+    <div class="actions"><button class="ghost" id="xLoad">코드로 불러오기</button>
+      <label class="ghost" style="display:inline-block;cursor:pointer">파일로 불러오기<input type="file" id="xPick" accept=".json,.txt,application/json,text/plain" hidden></label></div>
     <p class="note" id="xMsg" role="status" aria-live="polite"></p>
   </section>`;
 }
@@ -1530,7 +2144,7 @@ function bindXfer(){
   };
   const f=$.querySelector("#xFile");
   if(f) f.onclick=()=>{
-    const d=new Date(), name=`위기대응스코어-기록-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}.json`;
+    const d=new Date(), name=`기업살리기-기록-${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}.json`;
     const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(getHist())],{type:"application/json"})); a.download=name;
     document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
     msg(`${name} 파일로 저장했습니다.`);
@@ -1542,14 +2156,14 @@ function bindXfer(){
 }
 
 function report(flash){
+  setTheme(CS.id);
   const hist=getHist();
-  const head=`<header class="top">
-    <div class="eyebrow">경영전략실 · 누적 평가 기록</div>
-    <h1>나의 경영 리포트</h1>
-    <p class="muted">지금까지 끝낸 시나리오를 모아 종합 경영 능력, 진단·판단·예측 같은 세부 능력, 경영 성향, 위기 유형별 강점과 약점을 보여 줍니다. 기록은 이 브라우저에만 저장됩니다.</p>
-  </header>${nav("report")}`;
+  const head=`<header class="cover">
+    <div class="band"><span class="tag">누적 기록</span><h1>나의 경영 리포트</h1>
+      <p>지금까지 끝낸 위기를 모아 종합 경영 능력, 세부 능력, 경영 성향, 회사별·위기 유형별 강점과 약점을 보여 줍니다.</p></div>
+  </header>${tabs("report")}`;
   if(!hist.length){
-    $.innerHTML=`${head}<div class="empty"><b>아직 끝낸 시나리오가 없습니다.</b><p class="muted">시나리오를 하나 끝내면 종합 경영 능력 지수, 성향 분포, 영역별 비중, 위기 유형별 적합도가 여기에 쌓입니다.</p><button class="cta" id="pick">시나리오 고르기</button></div>
+    $.innerHTML=`${head}<div class="empty"><b>아직 끝낸 위기가 없습니다.</b><p class="muted">위기를 하나 끝내면 종합 경영 능력, 성향 분포, 영역별 비중, 회사별 적합도가 여기에 쌓입니다.</p><button class="cta" id="pick">회사 살리러 가기</button></div>
     ${xferCard(false)}`;
     bindNav(); bindXfer(); $.querySelector("#pick").onclick=()=>go("home");
     if(flash){const m=$.querySelector("#xMsg");if(m)m.textContent=flash} return;
@@ -1563,8 +2177,8 @@ function report(flash){
   const dims=DIMS.map((_,k)=>avg(hist.map(h=>(h.dims&&h.dims[k])||0)));
   const byCause=CAUSES.map(c=>({c,v:avg(ids.filter(id=>TAGS[id].includes(c)).map(id=>bestById[id]))}));
   const byGroup=GROUPS.map(gr=>({t:gr.t,v:avg(ids.filter(id=>SCN.find(s=>s.id===id).grp===gr.k).map(id=>bestById[id]))}));
-  const hardN=hist.filter(h=>h.d==="hard").length;
-  // 능력 지표 (능력 평가가 들어간 뒤의 기록만)
+  const byCo=COKEYS.map(k=>{const own=ids.filter(id=>SCN.find(s=>s.id===id).co===k);return {k,v:avg(own.map(id=>bestById[id])),n:own.length,all:SCN.filter(s=>s.co===k).length}});
+  const starAll=sum(ids.map(id=>STARS[GRADES.find(x=>bestById[id]>=x[0])[1]]));
   const R=hist.filter(h=>h.ab);
   const aAvg=k=>avg(R.map(h=>h.ab[k]).filter(v=>v!=null));
   const pH=sum(R.map(h=>h.pr?h.pr[0]:0)), pD=sum(R.map(h=>h.pr?h.pr[1]:0));
@@ -1579,30 +2193,29 @@ function report(flash){
     dx:R.length?`사전 진단 ${R.filter(h=>h.ab.dx!=null).length}번 가운데 1순위를 맞힌 비율 ${avg(R.filter(h=>h.ab.dx!=null).map(h=>h.ab.dx===100?100:0))??"–"}%`:"",
     pred:pD?`예측 ${pD}번 가운데 ${pH}번 맞음 (쉬움 난이도는 제외)`:"보통·어려움 난이도에서 결정할 때마다 예측하면 계산됩니다.",
     concept:kl.length?`개념 ${kl.length}개의 평균. 아래 '개념별 적용력'에서 개념마다 볼 수 있습니다.`:"",
-    press:abv.press!=null?`어려움 평균 ${hAvg}점 ÷ 보통 평균 ${nAvg}점 · 시간 초과 ${toN}번`:"보통과 어려움 난이도를 모두 응시하면 계산됩니다.",
+    press:abv.press!=null?`어려움 평균 ${hAvg}점 ÷ 보통 평균 ${nAvg}점 · 시간 초과 ${toN}번`:"보통과 어려움 난이도를 모두 도전하면 계산됩니다.",
     bal:negCnt.some(x=>x)?`가장 자주 비워 둔 영역: <b>${esc(DIMS[negCnt.indexOf(Math.max(...negCnt))])}</b> (${Math.max(...negCnt)}번)`:""
   };
   const abVals=ABS.map(a=>abv[a[0]]).filter(v=>v!=null), abTop=abVals.length?Math.max(...abVals):null;
-  const abCard=`<section class="card"><h2>능력 진단</h2>
-    <p class="muted" style="font-size:14px">성향과 따로 본 능력입니다. 0~100으로 표시하고, 능력 평가가 생긴 뒤의 도전 ${R.length}번으로 계산합니다.</p>
+  const abCard=`<section class="q"><div class="q-h"><h2>능력 진단</h2></div>
+    <p class="q-sub">성향과 따로 본 능력입니다. 0~100으로 표시하고, 능력 평가가 생긴 뒤의 도전 ${R.length}번으로 계산합니다.</p>
     <div class="dims">${ABS.map(([k,nm,d])=>abRow(nm,abv[k],`${esc(d)}${abEx[k]?`<br>${abEx[k]}`:""}`,abv[k]!=null&&abv[k]===abTop)).join("")}</div>
   </section>`;
-  const kRows=a=>`<div class="dims">${a.map(x=>`<div class="dim-row"><div class="h"><span>${esc(x.c)}<small>${x.n}단계</small></span><b class="mono">${x.v}</b></div><div class="track"><i style="width:${x.v}%"></i></div></div>`).join("")}</div>`;
-  const kCard=kl.length?`<section class="card"><h2>개념별 적용력</h2>
-    <p class="muted" style="font-size:14px">『초거대 위협』 개념이 걸린 단계에서 고른 선택의 적합도 평균입니다. 그 단계에서 나온 선지 중 최고치를 100으로 봅니다.</p>
+  const kRows=a=>`<div class="dims">${a.map(x=>`<div class="dim-row"><div class="h"><span>${esc(x.c)}<small>${x.n}단계</small></span><b class="num">${x.v}</b></div><div class="track"><i style="width:${x.v}%"></i></div></div>`).join("")}</div>`;
+  const kCard=kl.length?`<section class="q"><div class="q-h"><h2>개념별 적용력</h2></div>
+    <p class="q-sub">『초거대 위협』 개념이 걸린 단계에서 고른 선택의 적합도 평균입니다. 그 단계에서 나온 선지 중 최고치를 100으로 봅니다.</p>
     ${kl.length>8?`<div class="kgrid"><div><h3>강한 개념</h3>${kRows(kl.slice(0,4))}</div><div><h3>약한 개념</h3>${kRows(kl.slice(-4).reverse())}</div></div>`:kRows(kl)}
   </section>`:"";
   const whys=[];
   R.slice().reverse().forEach(h=>{const s=SCN.find(x=>x.id===h.id);if(!s||!Array.isArray(h.why))return;
     h.why.forEach((w,n)=>{if(w&&whys.length<8&&s.steps[n])whys.push({s,n,w,sty:h.sty&&h.sty[n]})})});
-  const whyCard=`<section class="card"><h2>결정 근거 기록</h2>
-    <p class="muted" style="font-size:14px">결정할 때 적은 근거 가운데 최근 8개입니다. 점수에는 들어가지 않습니다. 선생님이나 모둠과 근거를 나눌 때 쓰세요.</p>
+  const whyCard=`<section class="q"><div class="q-h"><h2>결정 이유 기록</h2></div>
+    <p class="q-sub">결정할 때 적은 이유 가운데 최근 8개입니다. 점수에는 들어가지 않습니다. 선생님이나 모둠과 이유를 나눌 때 쓰세요.</p>
     ${whys.length?`<div class="rev">${whys.map(x=>`<div class="rev-item">
-      <div class="mono muted" style="font-size:12px">${esc(x.s.title)} · ${esc(x.s.steps[x.n].t)}</div>
+      <div class="note">${esc(coName(x.s.co))} · ${esc(x.s.title)} · ${esc(x.s.steps[x.n].t)}</div>
       ${x.sty?`<div class="a"><span class="chip sty">${esc(styName(x.sty))}</span> ${esc(x.s.steps[x.n].g)}</div>`:""}
-      <div class="why">${esc(x.w)}</div></div>`).join("")}</div>`:`<p class="muted">아직 적은 근거가 없습니다. 결정할 때 '결재 의견'의 근거 칸에 적으면 여기에 모입니다.</p>`}
+      <div class="why">${esc(x.w)}</div></div>`).join("")}</div>`:`<p class="muted">아직 적은 이유가 없습니다. 결정할 때 '결정 메모'의 이유 칸에 적으면 여기에 모입니다.</p>`}
   </section>`;
-  // 진단 문장
   const diag=[];
   const abList=ABS.filter(a=>abv[a[0]]!=null).map(a=>({n:a[1],v:abv[a[0]]})).sort((a,b)=>b.v-a.v);
   if(abList.length>=2&&abList[0].v!==abList[abList.length-1].v) diag.push(`능력 가운데 <b>${esc(abList[0].n)}</b>(${abList[0].v})이 가장 강하고, <b>${esc(abList[abList.length-1].n)}</b>(${abList[abList.length-1].v})이 가장 약합니다.`);
@@ -1613,46 +2226,58 @@ function report(flash){
   if(abv.press!=null&&abv.press<90) diag.push(`시간 제한이 있으면 적합도가 보통 난이도의 ${abv.press}% 수준으로 떨어집니다.`);
   const dmax=dims.indexOf(Math.max(...dims)), dmin=dims.indexOf(Math.min(...dims));
   diag.push(`가장 많이 챙긴 영역은 <b>${esc(DIMS[dmax])}</b>(${dims[dmax]}), 가장 덜 챙긴 영역은 <b>${esc(DIMS[dmin])}</b>(${dims[dmin]})입니다.`);
+  const cov=byCo.filter(x=>x.v!=null).sort((a,b)=>b.v-a.v);
+  if(cov.length>=2&&cov[0].v!==cov[cov.length-1].v) diag.push(`<b>${esc(COS[cov[0].k].ind)}</b> 회사를 살릴 때 가장 강하고(${cov[0].v}점), <b>${esc(COS[cov[cov.length-1].k].ind)}</b> 회사에서 가장 약합니다(${cov[cov.length-1].v}점).`);
   const cv=byCause.filter(x=>x.v!=null).sort((a,b)=>b.v-a.v);
   if(cv.length>=2&&cv[0].v!==cv[cv.length-1].v) diag.push(`<b>${esc(cv[0].c)}</b> 위기에서 적합도가 가장 높고(${cv[0].v}점), <b>${esc(cv[cv.length-1].c)}</b> 위기에서 가장 낮습니다(${cv[cv.length-1].v}점).`);
   const topS=SKEYS.slice().sort((a,b)=>cnt[b]-cnt[a])[0];
   if(nPick){const pct=Math.round(cnt[topS]/nPick*100);diag.push(`전체 선택의 ${pct}%가 <b>${STY[topS].n}</b>입니다.${pct>=50?" 한 성향에 많이 기울어 있어, 그 성향의 약점이 드러나는 위기에서 점수가 떨어질 수 있습니다.":" 여러 성향을 상황에 맞춰 섞어 쓰고 있습니다."}`)}
   if(byGroup.every(x=>x.v!=null)&&byGroup[0].v!==byGroup[1].v){const hi=byGroup[0].v>byGroup[1].v?byGroup[0]:byGroup[1];diag.push(`피해 최소화(${byGroup[0].v}점)와 이익 극대화(${byGroup[1].v}점) 가운데 <b>${hi.t}</b> 상황에 더 강합니다.`)}
-  const untouched=byCause.filter(x=>x.v==null).map(x=>x.c);
-  if(untouched.length) diag.push(`아직 다루지 않은 위기 유형: ${esc(untouched.join(", "))}`);
+  const untried=byCo.filter(x=>!x.n).map(x=>coName(x.k));
+  if(untried.length) diag.push(`아직 살려 보지 않은 회사: ${esc(untried.join(", "))}`);
   const fmt=t=>{const d=new Date(t);return `${d.getMonth()+1}월 ${d.getDate()}일 ${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`};
   const mainOf=c=>{if(!c)return "";const k=SKEYS.slice().sort((a,b)=>(c[b]||0)-(c[a]||0))[0];return c[k]?STY[k].n:"결정 지연"};
   $.innerHTML=`${head}
   <section class="score">
-    <div class="n">${index}<small> / 100</small></div>
-    <div class="g"><span class="grade">종합 경영 능력 ${g[1]}</span><b>${g[2]}</b><span class="muted" style="font-size:13px">응시한 시나리오 ${ids.length}개의 최고 위기 적합도 평균</span></div>
-    <span class="stamp" aria-hidden="true">${g[1]}</span>
+    <div class="band">
+      <div class="n">${index}<small> / 100점</small></div>
+      <div class="g"><span class="grade">종합 경영 능력 ${g[1]}등급</span><b>${g[2]}</b></div>
+      <span class="medal" aria-hidden="true">${g[1]}</span>
+    </div>
+    <div class="sub"><span>도전한 위기 ${ids.length}개의 최고 위기 적합도 평균</span></div>
   </section>
   <div class="stats">
-    <div class="stat"><b>${ids.length}<small class="muted" style="font-size:15px"> / ${SCN.length}</small></b><span>응시한 시나리오</span></div>
-    <div class="stat"><b>${hist.length}</b><span>총 도전 횟수</span></div>
-    <div class="stat"><b>${hardN}</b><span>어려움 난이도 도전</span></div>
+    <div class="stat"><b class="num">${ids.length}<small class="muted" style="font-size:15px"> / ${SCN.length}</small></b><span>도전한 위기</span></div>
+    <div class="stat"><b class="num">${starAll}<small class="muted" style="font-size:15px"> / ${SCN.length*3}</small></b><span>모은 별</span></div>
+    <div class="stat"><b class="num">${hist.length}</b><span>총 도전 횟수</span></div>
   </div>
-  <section class="card"><h2>진단</h2><ul class="diag">${diag.map(x=>`<li>${x}</li>`).join("")}</ul></section>
-  ${abCard}
-  ${kCard}
-  <section class="card"><h2>종합 경영 성향</h2><p class="muted" style="font-size:14px">모든 도전에서 고른 선택 ${nPick}개를 합친 분포입니다.</p>${styleBlock(cnt,nPick)}</section>
-  <section class="card"><h2>영역별 평균 비중</h2><p class="muted" style="font-size:14px">도전마다 영역별로 얻을 수 있었던 최대치 대비 비율의 평균입니다.</p>${dimBlock(dims)}</section>
-  <section class="card"><h2>위기 유형별 적합도</h2>
-    <div class="dims">${byCause.map(x=>`
-      <div class="dim-row ${x.v==null?"na":""} ${cv.length&&x.v===cv[0].v?"top":""}">
-        <div class="h"><span>${esc(x.c)}</span><b class="mono">${x.v==null?"미응시":x.v}</b></div>
+  <section class="q"><div class="q-h"><h2>진단</h2></div><ul class="diag">${diag.map(x=>`<li>${x}</li>`).join("")}</ul></section>
+  <section class="q"><div class="q-h"><h2>회사별 적합도</h2></div>
+    <div class="dims">${byCo.map(x=>`
+      <div class="dim-row ${x.v==null?"na":""} ${cov.length&&x.v===cov[0].v?"top":""}">
+        <div class="h"><span>${esc(coName(x.k))}<small>${esc(COS[x.k].ind)} · ${x.n}/${x.all}개</small></span><b class="num">${x.v==null?"도전 전":x.v}</b></div>
         <div class="track"><i style="width:${x.v||0}%"></i></div>
       </div>`).join("")}</div>
-    <div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr))">${byGroup.map(x=>`<div class="stat"><b>${x.v==null?"–":x.v}</b><span>${x.t}</span></div>`).join("")}</div>
+  </section>
+  ${abCard}
+  ${kCard}
+  <section class="q"><div class="q-h"><h2>종합 경영 성향</h2></div><p class="q-sub">모든 도전에서 고른 선택 ${nPick}개를 합친 분포입니다.</p>${styleBlock(cnt,nPick)}</section>
+  <section class="q"><div class="q-h"><h2>영역별 평균 비중</h2></div><p class="q-sub">도전마다 영역별로 얻을 수 있었던 최대치 대비 비율의 평균입니다.</p>${dimBlock(dims)}</section>
+  <section class="q"><div class="q-h"><h2>위기 유형별 적합도</h2></div>
+    <div class="dims">${byCause.map(x=>`
+      <div class="dim-row ${x.v==null?"na":""} ${cv.length&&x.v===cv[0].v?"top":""}">
+        <div class="h"><span>${esc(x.c)}</span><b class="num">${x.v==null?"도전 전":x.v}</b></div>
+        <div class="track"><i style="width:${x.v||0}%"></i></div>
+      </div>`).join("")}</div>
+    <div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr))">${byGroup.map(x=>`<div class="stat"><b class="num">${x.v==null?"–":x.v}</b><span>${x.t}</span></div>`).join("")}</div>
   </section>
   ${whyCard}
-  <section class="card"><h2>최근 기록</h2>
+  <section class="q"><div class="q-h"><h2>최근 기록</h2></div>
     <div class="hist">${hist.slice(-10).reverse().map(h=>{const s=SCN.find(x=>x.id===h.id);return s?`
-      <div class="hrow"><span>${esc(s.title)}</span><span class="s">${h.t}</span>
-      <span class="m">${fmt(h.at)} · ${DIFF[h.d]?DIFF[h.d].n:""} · ${esc(mainOf(h.cnt))}</span></div>`:""}).join("")}</div>
+      <div class="hrow"><span>${esc(s.title)}</span><span class="s num">${h.t}</span>
+      <span class="m">${fmt(h.at)} · ${esc(coName(recCo(h)))} · ${DIFF[h.d]?DIFF[h.d].n:""} · ${esc(mainOf(h.cnt))}</span></div>`:""}).join("")}</div>
   </section>
-  ${flash?`<p class="note" role="status" style="border:1px solid var(--info);color:var(--info);padding:8px 12px;background:var(--surface)">${esc(flash)}</p>`:""}
+  ${flash?`<p class="flash" role="status">${esc(flash)}</p>`:""}
   ${xferCard(true)}
   <div class="actions" id="resetBox"><button class="danger" id="reset">기록 모두 지우기</button></div>`;
   bindNav(); bindXfer();
@@ -1661,7 +2286,7 @@ function report(flash){
     const box=$.querySelector("#resetBox");
     box.innerHTML=`<span style="align-self:center;font-size:14px">기록 ${hist.length}개를 모두 지웁니다. 되돌릴 수 없습니다.</span><button class="cta" id="yes">지우기</button><button class="ghost" id="no">취소</button>`;
     box.querySelector("#yes").onclick=()=>{store.set(HKEY,[]);report()};
-    box.querySelector("#no").onclick=report;
+    box.querySelector("#no").onclick=()=>report();
   };
 }
 window.addEventListener("hashchange",route);
